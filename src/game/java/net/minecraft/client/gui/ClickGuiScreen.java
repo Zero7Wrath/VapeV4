@@ -197,8 +197,8 @@ public class ClickGuiScreen extends GuiScreen {
                 mouseY,
                 searchField.xPosition,
                 searchField.yPosition,
-                searchField.width,
-                searchField.height)) {
+                WINDOW_WIDTH,
+                SEARCH_HEIGHT)) {
             searchField.mouseClicked(mouseX, mouseY, mouseButton);
             return;
         }
