@@ -1,12 +1,12 @@
 package net.minecraft.client.gui;
 
-import com.isacofff.clientbase.Category;
-import com.isacofff.clientbase.Client;
-import com.isacofff.clientbase.modules.Module;
-import com.isacofff.clientbase.settings.Setting;
-import com.isacofff.clientbase.settings.Setting.BooleanSetting;
-import com.isacofff.clientbase.settings.Setting.ModeSetting;
-import com.isacofff.clientbase.settings.Setting.NumberSetting;
+import com.zero7wrath.clientbase.Category;
+import com.zero7wrath.clientbase.Client;
+import com.zero7wrath.clientbase.modules.Module;
+import com.zero7wrath.clientbase.settings.Setting;
+import com.zero7wrath.clientbase.settings.Setting.BooleanSetting;
+import com.zero7wrath.clientbase.settings.Setting.ModeSetting;
+import com.zero7wrath.clientbase.settings.Setting.NumberSetting;
 import net.lax1dude.eaglercraft.Keyboard;
 import net.lax1dude.eaglercraft.KeyboardConstants;
 
