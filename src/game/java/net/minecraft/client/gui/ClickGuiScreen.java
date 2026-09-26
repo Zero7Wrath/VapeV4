@@ -2,250 +2,290 @@ package net.minecraft.client.gui;
 
 import com.zero7wrath.clientbase.Category;
 import com.zero7wrath.clientbase.Client;
+import com.zero7wrath.clientbase.config.ConfigScreen;
 import com.zero7wrath.clientbase.modules.Module;
 import com.zero7wrath.clientbase.settings.Setting;
-import com.zero7wrath.clientbase.settings.Setting.BooleanSetting;
-import com.zero7wrath.clientbase.settings.Setting.ModeSetting;
-import com.zero7wrath.clientbase.settings.Setting.NumberSetting;
-import net.lax1dude.eaglercraft.Keyboard;
 import net.lax1dude.eaglercraft.KeyboardConstants;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Vape V4 inspired ClickGUI port for Eaglercraft.
- *
- * The original Roblox GUI is component based. This class translates the
- * important interaction model into Minecraft's GuiScreen system:
- * - 220px dark windows
- * - draggable category windows
- * - expandable module rows
- * - Boolean / Mode / Number settings
- * - search bar
- * - tooltip descriptions
- *
- * Rendering intentionally uses vanilla GuiScreen primitives so it remains
- * compatible with the Eaglercraft WASM-GC target.
- */
 public class ClickGuiScreen extends GuiScreen {
-
-    private static final int WINDOW_WIDTH = 220;
-    private static final int HEADER_HEIGHT = 36;
-    private static final int ROW_HEIGHT = 25;
-    private static final int SEARCH_HEIGHT = 34;
-    private static final int CORNER = 5;
-    private static final int WINDOW_GAP = 10;
-
-    private static final int MAIN = 0xF51B1A1C;
-    private static final int MAIN_DARK = 0xFF161517;
-    private static final int ROW = 0xFF1B1A1C;
-    private static final int ROW_HOVER = 0xFF252326;
-    private static final int BORDER = 0xD03A393B;
+    private static final int SIDEBAR_W = 156;
+    private static final int PANEL_W = 286;
+    private static final int ROW_H = 29;
+    private static final int BG = 0xF7131214;
+    private static final int PANEL = 0xF91A191B;
+    private static final int ROW = 0xFF1D1C1E;
+    private static final int HOVER = 0xFF272528;
+    private static final int ACTIVE = 0xFFE6E6E6;
     private static final int TEXT = 0xFFC8C8C8;
-    private static final int TEXT_DIM = 0xFF8C8C8C;
-    private static final int ACCENT = 0xFFFFFFFF;
-    private static final int ENABLED = 0xFFE8E8E8;
-    private static final int ENABLED_TEXT = 0xFF181719;
-    private static final int TOOLTIP = 0xF0181718;
+    private static final int DIM = 0xFF777477;
+    private static final int LINE = 0xFF2E2C2F;
 
-    private final List<CategoryPanel> panels = new ArrayList<CategoryPanel>();
-    private GuiTextField searchField;
+    private final Category[] categories = new Category[] {
+        Category.Combat, Category.Render, Category.Utility, Category.World,
+        Category.Player, Category.Movement, Category.Legit, Category.Blatant
+    };
 
-    private CategoryPanel draggingPanel;
-    private int dragOffsetX;
-    private int dragOffsetY;
-
-    private NumberSetting draggingSlider;
-    private CategoryPanel sliderPanel;
-
-    private String tooltipText;
+    private int selected = 0;
+    private GuiTextField search;
+    private String tooltip;
     private int tooltipX;
     private int tooltipY;
 
     public ClickGuiScreen() {
-        int x = 12;
-        int y = 60;
-
-        for (Category category : Category.values()) {
-            CategoryPanel panel = new CategoryPanel(category, x, y);
-            panels.add(panel);
-            x += WINDOW_WIDTH + WINDOW_GAP;
-
-            if (x + WINDOW_WIDTH > 1920) {
-                x = 12;
-                y += 90;
-            }
-        }
     }
 
     @Override
     public void initGui() {
-        super.initGui();
-
-        searchField = new GuiTextField(
-                100,
-                this.fontRendererObj,
-                Math.max(0, this.width / 2 - 110),
-                13,
-                220,
-                SEARCH_HEIGHT
-        );
-        searchField.setMaxStringLength(64);
-        searchField.setText("");
-        searchField.setFocused(false);
-
-        updatePanelPositionsForScreen();
+        search = new GuiTextField(10, fontRendererObj, 182 + 12, 49, PANEL_W - 24, 20);
+        search.setMaxStringLength(64);
+        search.setFocused(false);
     }
 
-    private void updatePanelPositionsForScreen() {
-        if (panels.isEmpty()) {
-            return;
-        }
-
-        int x = 12;
-        int y = 60;
-
-        for (CategoryPanel panel : panels) {
-            if (!panel.hasBeenMoved) {
-                panel.x = x;
-                panel.y = y;
-            }
-
-            x += WINDOW_WIDTH + WINDOW_GAP;
-            if (x + WINDOW_WIDTH > this.width - 12) {
-                x = 12;
-                y += 90;
-            }
-        }
+    private int sx() {
+        return Math.max(12, width / 2 - 225);
     }
 
-    @Override
-    public void updateScreen() {
-        if (searchField != null) {
-            searchField.updateCursorCounter();
-        }
+    private int sy() {
+        return Math.max(12, height / 2 - 190);
+    }
+
+    private void smallCaps(String text, int x, int y, int color) {
+        fontRendererObj.drawSmallCapsString(text, x, y, color);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
+        drawRect(0, 0, width, height, 0xFF101012);
+        tooltip = null;
 
-        tooltipText = null;
+        int x = sx();
+        int y = sy();
+        int panelX = x + SIDEBAR_W + 10;
+        int panelY = y;
+        int panelH = Math.min(height - y - 12, 360);
 
-        drawSearchBar(mouseX, mouseY);
+        drawRoundedPanel(x, y, x + SIDEBAR_W, y + panelH, PANEL);
+        drawRoundedPanel(panelX, panelY, panelX + PANEL_W, panelY + panelH, PANEL);
 
-        for (CategoryPanel panel : panels) {
-            panel.draw(mouseX, mouseY);
+        smallCaps("VAPE", x + 14, y + 15, 0xFFFFFFFF);
+        smallCaps("V4", x + 51, y + 15, 0xFF88858A);
+        fontRendererObj.drawString("⚙", x + SIDEBAR_W - 21, y + 12, DIM);
+
+        int cy = y + 47;
+        for (int i = 0; i < categories.length; i++) {
+            boolean active = i == selected;
+            boolean hover = inside(mouseX, mouseY, x + 7, cy - 4, x + SIDEBAR_W - 7, cy + 22);
+
+            if (active) drawRect(x + 7, cy - 4, x + SIDEBAR_W - 7, cy + 22, 0xFF29272A);
+            else if (hover) drawRect(x + 7, cy - 4, x + SIDEBAR_W - 7, cy + 22, HOVER);
+
+            smallCaps(categoryLabel(categories[i]), x + 18, cy + 4, active ? 0xFFFFFFFF : TEXT);
+            fontRendererObj.drawString("›", x + SIDEBAR_W - 19, cy + 4, active ? TEXT : DIM);
+            cy += 29;
         }
 
-        if (tooltipText != null) {
-            drawTooltip(tooltipText, tooltipX, tooltipY);
+        drawRect(x + 12, y + 286, x + SIDEBAR_W - 12, y + 287, LINE);
+        smallCaps("MISC", x + 14, y + 299, DIM);
+
+        miscRow(x, y + 313, "Friends", mouseX, mouseY);
+        miscRow(x, y + 338, "Profiles", mouseX, mouseY);
+
+        smallCaps(categoryLabel(categories[selected]), panelX + 14, panelY + 14, 0xFFE0E0E0);
+        fontRendererObj.drawString("...", panelX + PANEL_W - 25, panelY + 12, DIM);
+
+        drawRect(panelX + 10, panelY + 37, panelX + PANEL_W - 10, panelY + 38, LINE);
+        search.drawTextBox();
+        if (search.getText().length() == 0) {
+            smallCaps("search", panelX + 18, panelY + 55, DIM);
+        }
+
+        int rowY = panelY + 69;
+        String query = search.getText().trim().toLowerCase();
+
+        for (Module module : Client.manager.getModulesByCategory(categories[selected])) {
+            if (query.length() > 0 && !module.getName().toLowerCase().contains(query)) continue;
+
+            boolean hover = inside(mouseX, mouseY, panelX + 7, rowY, panelX + PANEL_W - 7, rowY + ROW_H);
+            boolean enabled = module.isEnabled();
+
+            drawRect(panelX + 7, rowY, panelX + PANEL_W - 7, rowY + ROW_H,
+                    enabled ? ACTIVE : (hover ? HOVER : ROW));
+
+            smallCaps(module.getName(), panelX + 16, rowY + 9, enabled ? 0xFF151416 : TEXT);
+
+            if (!module.getSettings().isEmpty()) {
+                fontRendererObj.drawString("⋮", panelX + PANEL_W - 25, rowY + 8,
+                        module.open ? 0xFFFFFFFF : DIM);
+            }
+
+            if (hover && module.getDescription() != null && !"-".equals(module.getDescription())) {
+                tooltip = module.getDescription();
+                tooltipX = mouseX;
+                tooltipY = mouseY;
+            }
+
+            rowY += ROW_H;
+
+            if (module.open) {
+                for (Setting<?> setting : module.getSettings()) {
+                    drawSetting(panelX, rowY, setting, mouseX, mouseY);
+                    rowY += ROW_H;
+                }
+            }
+
+            if (rowY > panelY + panelH - 25) break;
+        }
+
+        if (tooltip != null) {
+            int tw = fontRendererObj.getStringWidth(tooltip) + 12;
+            int tx = Math.min(tooltipX + 8, width - tw - 4);
+            int ty = Math.min(tooltipY + 8, height - 24);
+            drawRect(tx, ty, tx + tw, ty + 18, 0xF0181718);
+            fontRendererObj.drawString(tooltip, tx + 6, ty + 5, TEXT);
         }
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
-    private void drawSearchBar(int mouseX, int mouseY) {
-        int x = searchField.xPosition;
-        int y = searchField.yPosition;
+    private void drawRoundedPanel(int x1, int y1, int x2, int y2, int color) {
+        drawRect(x1 + 4, y1, x2 - 4, y2, color);
+        drawRect(x1, y1 + 4, x2, y2 - 4, color);
+        drawRect(x1 + 5, y1 + 1, x2 - 5, y1 + 2, LINE);
+        drawRect(x1 + 5, y2 - 2, x2 - 5, y2 - 1, LINE);
+    }
 
-        drawPanel(x, y, x + WINDOW_WIDTH, y + SEARCH_HEIGHT);
+    private void drawSetting(int panelX, int rowY, Setting<?> setting, int mouseX, int mouseY) {
+        boolean hover = inside(mouseX, mouseY, panelX + 7, rowY, panelX + PANEL_W - 7, rowY + ROW_H);
+        drawRect(panelX + 7, rowY, panelX + PANEL_W - 7, rowY + ROW_H, hover ? HOVER : 0xFF171618);
 
-        fontRendererObj.drawString("Vape", x + 11, y + 12, TEXT);
-        fontRendererObj.drawString("V4", x + 46, y + 12, ACCENT);
+        smallCaps(setting.getName(), panelX + 16, rowY + 9, TEXT);
 
-        drawRect(x + 57, y + 12, x + 58, y + 25, 0xFF383638);
-
-        if (searchField.getText().length() == 0) {
-            fontRendererObj.drawString("Search", x + 68, y + 12, TEXT_DIM);
-        } else {
-            searchField.drawTextBox();
+        if (setting instanceof Setting.BooleanSetting) {
+            String value = ((Setting.BooleanSetting) setting).getValue() ? "on" : "off";
+            smallCaps(value, panelX + PANEL_W - 45, rowY + 9,
+                    ((Setting.BooleanSetting) setting).getValue() ? 0xFFFFFFFF : DIM);
+        } else if (setting instanceof Setting.ModeSetting) {
+            String value = String.valueOf(setting.getValue());
+            smallCaps(value, panelX + PANEL_W - fontRendererObj.getStringWidth(value) - 18, rowY + 9, 0xFFE0E0E0);
+        } else if (setting instanceof Setting.NumberSetting) {
+            Setting.NumberSetting n = (Setting.NumberSetting) setting;
+            String value = format(n.getValue());
+            smallCaps(value, panelX + PANEL_W - fontRendererObj.getStringWidth(value) - 18, rowY + 5, 0xFFE0E0E0);
+            int bx = panelX + 16;
+            int by = rowY + 20;
+            int bw = PANEL_W - 32;
+            double pct = (n.getValue() - n.getMin()) / (n.getMax() - n.getMin());
+            pct = Math.max(0.0, Math.min(1.0, pct));
+            drawRect(bx, by, bx + bw, by + 2, 0xFF444245);
+            drawRect(bx, by, bx + (int)(bw * pct), by + 2, 0xFFFFFFFF);
         }
-
-        fontRendererObj.drawString("?", x + WINDOW_WIDTH - 20, y + 11, TEXT_DIM);
     }
 
-    private void drawPanel(int x1, int y1, int x2, int y2) {
-        drawRect(x1 + CORNER, y1, x2 - CORNER, y2, MAIN);
-        drawRect(x1, y1 + CORNER, x2, y2 - CORNER, MAIN);
-        drawRect(x1 + 2, y1 + 2, x2 - 2, y1 + 3, BORDER);
-        drawRect(x1 + 2, y2 - 3, x2 - 2, y2 - 2, BORDER);
-        drawRect(x1 + 2, y1 + 2, x1 + 3, y2 - 2, BORDER);
-        drawRect(x2 - 3, y1 + 2, x2 - 2, y2 - 2, BORDER);
+    private void miscRow(int x, int y, String label, int mouseX, int mouseY) {
+        if (inside(mouseX, mouseY, x + 7, y - 4, x + SIDEBAR_W - 7, y + 20))
+            drawRect(x + 7, y - 4, x + SIDEBAR_W - 7, y + 20, HOVER);
+        smallCaps(label, x + 18, y + 4, TEXT);
+        fontRendererObj.drawString("›", x + SIDEBAR_W - 19, y + 4, DIM);
     }
 
-    private void drawTooltip(String text, int mouseX, int mouseY) {
-        int width = fontRendererObj.getStringWidth(text) + 12;
-        int x = Math.min(mouseX + 8, this.width - width - 2);
-        int y = Math.min(mouseY + 8, this.height - 20);
-
-        drawRect(x, y, x + width, y + 18, TOOLTIP);
-        fontRendererObj.drawString(text, x + 6, y + 5, TEXT);
+    private String categoryLabel(Category category) {
+        return category.name();
     }
 
-    private boolean isHover(int mouseX, int mouseY, int x, int y, int width, int height) {
-        return mouseX >= x && mouseX <= x + width
-                && mouseY >= y && mouseY <= y + height;
+    private String format(double value) {
+        if (value == (long)value) return String.valueOf((long)value);
+        String s = String.valueOf(value);
+        return s.length() > 7 ? s.substring(0, 7) : s;
+    }
+
+    private boolean inside(int mx, int my, int x1, int y1, int x2, int y2) {
+        return mx >= x1 && mx <= x2 && my >= y1 && my <= y2;
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        tooltipText = null;
+        int x = sx();
+        int y = sy();
+        int panelX = x + SIDEBAR_W + 10;
+        int panelY = y;
 
-        if (searchField != null && isHover(
-                mouseX,
-                mouseY,
-                searchField.xPosition,
-                searchField.yPosition,
-                WINDOW_WIDTH,
-                SEARCH_HEIGHT)) {
-            searchField.mouseClicked(mouseX, mouseY, mouseButton);
+        if (inside(mouseX, mouseY, x + 7, y + 309, x + SIDEBAR_W - 7, y + 333) && mouseButton == 0) {
+            mc.displayGuiScreen(new ConfigScreen());
             return;
         }
 
-        for (int i = panels.size() - 1; i >= 0; i--) {
-            if (panels.get(i).mouseClicked(mouseX, mouseY, mouseButton)) {
+        int cy = y + 47;
+        for (int i = 0; i < categories.length; i++) {
+            if (inside(mouseX, mouseY, x + 7, cy - 4, x + SIDEBAR_W - 7, cy + 22) && mouseButton == 0) {
+                selected = i;
                 return;
+            }
+            cy += 29;
+        }
+
+        if (inside(mouseX, mouseY, panelX + 10, panelY + 37, panelX + PANEL_W - 10, panelY + 62)) {
+            search.mouseClicked(mouseX, mouseY, mouseButton);
+            return;
+        }
+
+        int rowY = panelY + 69;
+        String query = search.getText().trim().toLowerCase();
+
+        for (Module module : Client.manager.getModulesByCategory(categories[selected])) {
+            if (query.length() > 0 && !module.getName().toLowerCase().contains(query)) continue;
+
+            if (inside(mouseX, mouseY, panelX + 7, rowY, panelX + PANEL_W - 7, rowY + ROW_H)) {
+                if (mouseButton == 0) {
+                    if (!module.getSettings().isEmpty() && mouseX > panelX + PANEL_W - 45)
+                        module.open = !module.open;
+                    else
+                        module.toggle();
+                } else if (mouseButton == 1 && !module.getSettings().isEmpty()) {
+                    module.open = !module.open;
+                }
+                return;
+            }
+
+            rowY += ROW_H;
+            if (module.open) {
+                for (Setting<?> setting : module.getSettings()) {
+                    if (inside(mouseX, mouseY, panelX + 7, rowY, panelX + PANEL_W - 7, rowY + ROW_H)) {
+                        clickSetting(setting);
+                        return;
+                    }
+                    rowY += ROW_H;
+                }
             }
         }
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
-    @Override
-    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
-        if (draggingPanel != null && clickedMouseButton == 0) {
-            draggingPanel.x = mouseX - dragOffsetX;
-            draggingPanel.y = mouseY - dragOffsetY;
-            draggingPanel.hasBeenMoved = true;
+    private void clickSetting(Setting<?> setting) {
+        if (setting instanceof Setting.BooleanSetting) {
+            ((Setting.BooleanSetting) setting).toggle();
+        } else if (setting instanceof Setting.ModeSetting) {
+            ((Setting.ModeSetting) setting).cycle();
         }
-
-        if (draggingSlider != null && clickedMouseButton == 0 && sliderPanel != null) {
-            sliderPanel.updateSlider(draggingSlider, mouseX);
-        }
-
-        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
     }
 
     @Override
-    protected void mouseReleased(int mouseX, int mouseY, int state) {
-        draggingPanel = null;
-        draggingSlider = null;
-        sliderPanel = null;
-        super.mouseReleased(mouseX, mouseY, state);
+    protected void mouseClickMove(int mouseX, int mouseY, int button, long timeSinceLastClick) {
+        super.mouseClickMove(mouseX, mouseY, button, timeSinceLastClick);
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (searchField != null && searchField.isFocused()) {
+        if (search != null && search.isFocused()) {
             if (keyCode == KeyboardConstants.KEY_ESCAPE) {
-                searchField.setFocused(false);
+                search.setFocused(false);
                 return;
             }
-
-            searchField.textboxKeyTyped(typedChar, keyCode);
+            search.textboxKeyTyped(typedChar, keyCode);
             return;
         }
 
@@ -258,305 +298,7 @@ public class ClickGuiScreen extends GuiScreen {
     }
 
     @Override
-    public void handleMouseInput() throws IOException {
-        super.handleMouseInput();
-    }
-
-    @Override
     public boolean doesGuiPauseGame() {
         return false;
-    }
-
-    private class CategoryPanel {
-
-        private final Category category;
-
-        private int x;
-        private int y;
-
-        private boolean expanded = true;
-        private boolean hasBeenMoved = false;
-
-        private CategoryPanel(Category category, int x, int y) {
-            this.category = category;
-            this.x = x;
-            this.y = y;
-        }
-
-        private ArrayList<Module> getVisibleModules() {
-            ArrayList<Module> result = new ArrayList<Module>();
-            String query = searchField == null ? "" : searchField.getText().trim().toLowerCase();
-
-            for (Module module : Client.manager.getModulesByCategory(category)) {
-                if (query.length() == 0 || module.getName().toLowerCase().contains(query)) {
-                    result.add(module);
-                }
-            }
-
-            return result;
-        }
-
-        private int getHeight() {
-            int height = HEADER_HEIGHT;
-
-            if (!expanded) {
-                return height;
-            }
-
-            for (Module module : getVisibleModules()) {
-                height += ROW_HEIGHT;
-
-                if (module.open) {
-                    for (Setting<?> setting : module.getSettings()) {
-                        height += ROW_HEIGHT;
-                    }
-                }
-            }
-
-            return Math.min(height, 601);
-        }
-
-        private void draw(int mouseX, int mouseY) {
-            int height = getHeight();
-
-            drawPanel(x, y, x + WINDOW_WIDTH, y + height);
-
-            fontRendererObj.drawString(category.name(), x + 12, y + 13, TEXT);
-
-            String arrow = expanded ? "v" : ">";
-            fontRendererObj.drawString(arrow, x + WINDOW_WIDTH - 19, y + 13, TEXT_DIM);
-
-            if (!expanded) {
-                return;
-            }
-
-            int rowY = y + HEADER_HEIGHT;
-            ArrayList<Module> modules = getVisibleModules();
-
-            for (Module module : modules) {
-                boolean hover = isHover(mouseX, mouseY, x, rowY, WINDOW_WIDTH, ROW_HEIGHT);
-                int background = module.isEnabled() ? ENABLED : (hover ? ROW_HOVER : ROW);
-
-                drawRect(x + 1, rowY, x + WINDOW_WIDTH - 1, rowY + ROW_HEIGHT, background);
-
-                int textColor = module.isEnabled() ? ENABLED_TEXT : TEXT;
-                fontRendererObj.drawString(module.getName(), x + 12, rowY + 8, textColor);
-
-                String dots = module.getSettings().isEmpty() ? "" : "...";
-                if (dots.length() > 0) {
-                    fontRendererObj.drawString(
-                            dots,
-                            x + WINDOW_WIDTH - 25,
-                            rowY + 8,
-                            module.open ? TEXT : TEXT_DIM
-                    );
-                }
-
-                if (hover && module.getDescription() != null
-                        && module.getDescription().length() > 0
-                        && !" - - - ".equals(module.getDescription())) {
-                    tooltipText = module.getDescription();
-                    tooltipX = mouseX;
-                    tooltipY = mouseY;
-                }
-
-                rowY += ROW_HEIGHT;
-
-                if (module.open) {
-                    for (Setting<?> setting : module.getSettings()) {
-                        drawSetting(module, setting, rowY, mouseX, mouseY);
-                        rowY += ROW_HEIGHT;
-                    }
-                }
-            }
-        }
-
-        private void drawSetting(Module module, Setting<?> setting, int rowY, int mouseX, int mouseY) {
-            boolean hover = isHover(mouseX, mouseY, x, rowY, WINDOW_WIDTH, ROW_HEIGHT);
-            int background = hover ? ROW_HOVER : MAIN_DARK;
-
-            drawRect(x + 1, rowY, x + WINDOW_WIDTH - 1, rowY + ROW_HEIGHT, background);
-
-            String label = setting.getName();
-            int textColor = TEXT;
-
-            if (setting instanceof BooleanSetting) {
-                BooleanSetting bool = (BooleanSetting) setting;
-                String value = bool.getValue() ? "ON" : "OFF";
-                fontRendererObj.drawString(label, x + 12, rowY + 7, textColor);
-
-                int valueWidth = fontRendererObj.getStringWidth(value);
-                fontRendererObj.drawString(
-                        value,
-                        x + WINDOW_WIDTH - valueWidth - 12,
-                        rowY + 7,
-                        bool.getValue() ? TEXT : TEXT_DIM
-                );
-            } else if (setting instanceof ModeSetting) {
-                ModeSetting mode = (ModeSetting) setting;
-                String value = String.valueOf(mode.getValue());
-                fontRendererObj.drawString(label, x + 12, rowY + 8, textColor);
-
-                int valueWidth = fontRendererObj.getStringWidth(value);
-                fontRendererObj.drawString(
-                        value,
-                        x + WINDOW_WIDTH - valueWidth - 12,
-                        rowY + 7,
-                        ACCENT
-                );
-            } else if (setting instanceof NumberSetting) {
-                NumberSetting number = (NumberSetting) setting;
-
-                fontRendererObj.drawString(label, x + 12, rowY + 4, textColor);
-
-                String value = formatNumber(number.getValue());
-                int valueWidth = fontRendererObj.getStringWidth(value);
-                fontRendererObj.drawString(
-                        value,
-                        x + WINDOW_WIDTH - valueWidth - 12,
-                        rowY + 4,
-                        ACCENT
-                );
-
-                int barX = x + 12;
-                int barY = rowY + 17;
-                int barWidth = WINDOW_WIDTH - 24;
-
-                drawRect(barX, barY, barX + barWidth, barY + 2, 0xFF454345);
-
-                double range = number.getMax() - number.getMin();
-                double percent = range <= 0.0
-                        ? 0.0
-                        : (number.getValue() - number.getMin()) / range;
-
-                percent = Math.max(0.0, Math.min(1.0, percent));
-
-                int fillWidth = (int) (barWidth * percent);
-                drawRect(barX, barY, barX + fillWidth, barY + 2, ACCENT);
-
-                int knobX = barX + fillWidth;
-                drawRect(knobX - 2, barY - 2, knobX + 2, barY + 4, TEXT);
-            }
-
-            if (hover) {
-                tooltipText = setting.getName();
-                tooltipX = mouseX;
-                tooltipY = mouseY;
-            }
-        }
-
-        private boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
-            int height = getHeight();
-
-            if (!isHover(mouseX, mouseY, x, y, WINDOW_WIDTH, height)) {
-                return false;
-            }
-
-            if (isHover(mouseX, mouseY, x, y, WINDOW_WIDTH, HEADER_HEIGHT)) {
-                if (mouseButton == 0) {
-                    draggingPanel = this;
-                    dragOffsetX = mouseX - x;
-                    dragOffsetY = mouseY - y;
-                } else if (mouseButton == 1) {
-                    expanded = !expanded;
-                }
-
-                return true;
-            }
-
-            if (!expanded) {
-                return true;
-            }
-
-            int rowY = y + HEADER_HEIGHT;
-
-            for (Module module : getVisibleModules()) {
-                if (isHover(mouseX, mouseY, x, rowY, WINDOW_WIDTH, ROW_HEIGHT)) {
-                    if (mouseButton == 0) {
-                        int dotsX = x + WINDOW_WIDTH - 34;
-
-                        if (!module.getSettings().isEmpty() && mouseX >= dotsX) {
-                            module.open = !module.open;
-                        } else {
-                            module.toggle();
-                        }
-                    } else if (mouseButton == 1) {
-                        module.open = !module.open;
-                    }
-
-                    return true;
-                }
-
-                rowY += ROW_HEIGHT;
-
-                if (module.open) {
-                    for (Setting<?> setting : module.getSettings()) {
-                        if (isHover(mouseX, mouseY, x, rowY, WINDOW_WIDTH, ROW_HEIGHT)) {
-                            handleSettingClick(setting, mouseX, mouseButton);
-                            return true;
-                        }
-
-                        rowY += ROW_HEIGHT;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        private void handleSettingClick(Setting<?> setting, int mouseX, int mouseButton) {
-            if (setting instanceof BooleanSetting) {
-                if (mouseButton == 0) {
-                    ((BooleanSetting) setting).toggle();
-                }
-                return;
-            }
-
-            if (setting instanceof ModeSetting) {
-                if (mouseButton == 0) {
-                    ((ModeSetting) setting).cycle();
-                }
-                return;
-            }
-
-            if (setting instanceof NumberSetting && mouseButton == 0) {
-                draggingSlider = (NumberSetting) setting;
-                sliderPanel = this;
-                updateSlider((NumberSetting) setting, mouseX);
-            }
-        }
-
-        private void updateSlider(NumberSetting setting, int mouseX) {
-            int barX = x + 12;
-            int barWidth = WINDOW_WIDTH - 24;
-
-            double percent = (mouseX - barX) / (double) barWidth;
-            percent = Math.max(0.0, Math.min(1.0, percent));
-
-            double value = setting.getMin()
-                    + percent * (setting.getMax() - setting.getMin());
-
-            double increment = setting.getIncrement();
-            if (increment > 0.0) {
-                value = setting.getMin()
-                        + Math.round((value - setting.getMin()) / increment) * increment;
-            }
-
-            value = Math.max(setting.getMin(), Math.min(setting.getMax(), value));
-            setting.setValue(value);
-        }
-    }
-
-    private String formatNumber(double value) {
-        if (value == (long) value) {
-            return String.valueOf((long) value);
-        }
-
-        String result = String.valueOf(value);
-        if (result.length() > 7) {
-            result = result.substring(0, 7);
-        }
-
-        return result;
     }
 }
