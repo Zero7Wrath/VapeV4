@@ -367,11 +367,33 @@ public class FontRenderer implements IResourceManagerReloadListener {
 	 * the normal lowercase glyphs.
 	 */
 	public int drawSmallCapsString(String text, float x, float y, int color) {
+		if (text == null) return (int) x;
+		String converted = toSmallCaps(text);
+		float drawX = x;
 		boolean oldUnicode = this.unicodeFlag;
 		this.unicodeFlag = true;
-		int result = this.drawString(toSmallCaps(text), x, y, color, false);
+
+		for (int i = 0; i < converted.length(); ++i) {
+			char c = converted.charAt(i);
+			boolean smallCap = c >= 0x0100 && c < 0xA800 && this.glyphWidth[c] != 0;
+
+			if (smallCap) {
+				drawX = this.drawString(String.valueOf(c), drawX, y, color, false);
+			} else if (Character.isLetter(text.charAt(i))) {
+				String fallback = String.valueOf(Character.toUpperCase(text.charAt(i)));
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(drawX, y + 1.0F, 0.0F);
+				GlStateManager.scale(1.0F, 0.78F, 1.0F);
+				this.drawString(fallback, 0, 0, color, false);
+				GlStateManager.popMatrix();
+				drawX += this.getStringWidth(fallback);
+			} else {
+				drawX = this.drawString(String.valueOf(c), drawX, y, color, false);
+			}
+		}
+
 		this.unicodeFlag = oldUnicode;
-		return result;
+		return (int) drawX;
 	}
 
 	public int drawSmallCapsStringWithShadow(String text, float x, float y, int color) {
