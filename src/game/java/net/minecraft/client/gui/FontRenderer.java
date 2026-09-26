@@ -337,7 +337,7 @@ public class FontRenderer implements IResourceManagerReloadListener {
 
 	static {
 		String lower = "abcdefghijklmnopqrstuvwxyz";
-		String caps = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢ";
+		String caps = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡxʏᴢ";
 		for (int i = 0; i < lower.length(); ++i) {
 			SMALL_CAPS[lower.charAt(i)] = caps.charAt(i);
 		}
@@ -367,15 +367,27 @@ public class FontRenderer implements IResourceManagerReloadListener {
 	 * the normal lowercase glyphs.
 	 */
 	public int drawSmallCapsString(String text, float x, float y, int color) {
-		return this.drawString(toSmallCaps(text), x, y, color, false);
+		boolean oldUnicode = this.unicodeFlag;
+		this.unicodeFlag = true;
+		int result = this.drawString(toSmallCaps(text), x, y, color, false);
+		this.unicodeFlag = oldUnicode;
+		return result;
 	}
 
 	public int drawSmallCapsStringWithShadow(String text, float x, float y, int color) {
-		return this.drawString(toSmallCaps(text), x, y, color, true);
+		boolean oldUnicode = this.unicodeFlag;
+		this.unicodeFlag = true;
+		int result = this.drawString(toSmallCaps(text), x, y, color, true);
+		this.unicodeFlag = oldUnicode;
+		return result;
 	}
 
 	public int getSmallCapsStringWidth(String text) {
-		return this.getStringWidth(toSmallCaps(text));
+		boolean oldUnicode = this.unicodeFlag;
+		this.unicodeFlag = true;
+		int result = this.getStringWidth(toSmallCaps(text));
+		this.unicodeFlag = oldUnicode;
+		return result;
 	}
 
 	/**
