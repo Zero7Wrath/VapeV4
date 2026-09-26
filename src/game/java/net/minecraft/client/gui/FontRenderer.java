@@ -333,6 +333,51 @@ public class FontRenderer implements IResourceManagerReloadListener {
 		}
 	}
 
+	private static final char[] SMALL_CAPS = new char[128];
+
+	static {
+		String lower = "abcdefghijklmnopqrstuvwxyz";
+		String caps = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢ";
+		for (int i = 0; i < lower.length(); ++i) {
+			SMALL_CAPS[lower.charAt(i)] = caps.charAt(i);
+		}
+	}
+
+	/**
+	 * Converts ASCII letters to the Unicode small-cap glyphs used by modern
+	 * Minecraft-style UI typography. Characters without a small-cap glyph are
+	 * left unchanged.
+	 */
+	public static String toSmallCaps(String text) {
+		if (text == null || text.length() == 0) {
+			return text;
+		}
+
+		StringBuilder builder = new StringBuilder(text.length());
+		for (int i = 0; i < text.length(); ++i) {
+			char c = text.charAt(i);
+			char small = c < SMALL_CAPS.length ? SMALL_CAPS[c] : 0;
+			builder.append(small == 0 ? c : small);
+		}
+		return builder.toString();
+	}
+
+	/**
+	 * Draws a string using real Unicode small-cap characters rather than scaling
+	 * the normal lowercase glyphs.
+	 */
+	public int drawSmallCapsString(String text, float x, float y, int color) {
+		return this.drawString(toSmallCaps(text), x, y, color, false);
+	}
+
+	public int drawSmallCapsStringWithShadow(String text, float x, float y, int color) {
+		return this.drawString(toSmallCaps(text), x, y, color, true);
+	}
+
+	public int getSmallCapsStringWidth(String text) {
+		return this.getStringWidth(toSmallCaps(text));
+	}
+
 	/**
 	 * Draws the specified string with a shadow.
 	 */
