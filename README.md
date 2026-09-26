@@ -4,12 +4,6 @@
 
 This repository contains the Eaglercraft port of Vape V4, adapted to run within the Eaglercraft environment.
 
-## ClickGUI
-
-The ClickGUI is located at:
-
-`src.game.java.net.minecraft.client.gui.ClickGuiScreen`
-
 ## Credits
 
 - **Vape V4:** Original Vape V4 project by **7GrandDadPGN**
