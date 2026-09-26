@@ -60,6 +60,43 @@ public class UniversalModule extends Module {
             mc.player.motionY = mc.gameSettings.keyBindJump.isKeyDown() ? 0.42D :
                     (mc.gameSettings.keyBindSneak.isKeyDown() ? -0.42D : 0.0D);
             multiplyHorizontal(1.35D);
+        } else if (n.equalsIgnoreCase("LongJump")) {
+            if (mc.player.onGround && mc.player.moveForward != 0.0F) {
+                mc.player.jump();
+                multiplyHorizontal(1.65D);
+            } else {
+                multiplyHorizontal(1.15D);
+            }
+        } else if (n.equalsIgnoreCase("Wallhop")) {
+            if (mc.player.isCollidedHorizontally) {
+                mc.player.motionY = 0.42D;
+                multiplyHorizontal(1.15D);
+            }
+        } else if (n.equalsIgnoreCase("Swim")) {
+            if (mc.player.isInWater() && mc.gameSettings.keyBindJump.isKeyDown()) {
+                mc.player.motionY = 0.30D;
+            }
+        } else if (n.equalsIgnoreCase("SpinBot")) {
+            mc.player.rotationYaw += 45.0F;
+            mc.player.rotationPitch = 0.0F;
+        } else if (n.equalsIgnoreCase("Invisible")) {
+            mc.player.setInvisible(true);
+        } else if (n.equalsIgnoreCase("TargetStrafe")) {
+            EntityPlayer target = findTarget(range.getValue().doubleValue());
+            if (target != null) {
+                double angle = mc.player.ticksExisted * 0.18D;
+                double x = target.posX + Math.cos(angle) * 2.5D;
+                double z = target.posZ + Math.sin(angle) * 2.5D;
+                mc.player.motionX = (x - mc.player.posX) * 0.25D;
+                mc.player.motionZ = (z - mc.player.posZ) * 0.25D;
+                face(target);
+            }
+        } else if (n.equalsIgnoreCase("MouseTP")) {
+            if (mc.objectMouseOver != null && mc.objectMouseOver.getBlockPos() != null
+                    && mc.player.ticksExisted % 5 == 0) {
+                net.minecraft.util.math.BlockPos pos = mc.objectMouseOver.getBlockPos();
+                mc.player.setPosition(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
+            }
         } else if (n.equalsIgnoreCase("HighJump")) {
             if (mc.player.onGround && mc.player.moveForward != 0.0F) mc.player.motionY = height.getValue().doubleValue();
         } else if (n.equalsIgnoreCase("AntiFall")) {
