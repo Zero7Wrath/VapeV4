@@ -1,6 +1,7 @@
 package com.zero7wrath.clientbase;
 
 import com.zero7wrath.clientbase.modules.Manager;
+import com.zero7wrath.clientbase.config.ConfigManager;
 
 public class Client {
 
@@ -11,6 +12,8 @@ public class Client {
         INSTANCE = this;
         manager = new Manager();
         manager.init();
+        ConfigManager.ensureDirectory();
+        ConfigManager.load("default");
     }
 
     public void onTick() {
