@@ -543,8 +543,9 @@ public class Minecraft implements IThreadListener {
 
         //this is how it gets initialized.
 
-        com.isacofff.clientbase.Client.INSTANCE = new com.isacofff.clientbase.Client();
-        com.isacofff.clientbase.Client.INSTANCE.init();
+        if (Client.INSTANCE == null) {
+            new Client().init();
+        }
 
     }
 
