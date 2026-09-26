@@ -89,13 +89,23 @@ public abstract class Setting<T> {
             }
         }
 
-        public void cycle() {
-            if (modes.length == 0) {
-                return;
+        @Override
+        public void setValue(String value) {
+            if (value == null) return;
+            for (int i = 0; i < modes.length; i++) {
+                if (modes[i].equalsIgnoreCase(value)) {
+                    index = i;
+                    super.setValue(modes[i]);
+                    return;
+                }
             }
+            super.setValue(value);
+        }
 
+        public void cycle() {
+            if (modes.length == 0) return;
             index = (index + 1) % modes.length;
-            setValue(modes[index]);
+            super.setValue(modes[index]);
         }
     }
 }
