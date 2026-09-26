@@ -149,7 +149,7 @@ public class UniversalModule extends Module {
         double bestDistance = maxRange;
         for (Entity entity : mc.world.loadedEntityList) {
             if (!(entity instanceof EntityPlayer) || entity == mc.player || entity.isDead) continue;
-            double distance = mc.player.getDistance(entity);
+            double distance = mc.player.getDistance(entity.posX, entity.posY, entity.posZ);
             if (distance < bestDistance) {
                 bestDistance = distance;
                 best = (EntityPlayer) entity;
