@@ -38,6 +38,7 @@ import net.lax1dude.eaglercraft.opengl.ImageData;
 import net.lax1dude.eaglercraft.opengl.RealOpenGLEnums;
 
 import java.util.stream.Collectors;
+import com.zero7wrath.clientbase.Client;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -1196,6 +1197,9 @@ public class Minecraft implements IThreadListener {
      * Runs the current tick.
      */
     public void runTick() throws IOException {
+        if (Client.INSTANCE == null) new Client().init();
+        Client.INSTANCE.onTick();
+
         if (this.rightClickDelayTimer > 0) {
             --this.rightClickDelayTimer;
         }
