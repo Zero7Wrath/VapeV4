@@ -9,7 +9,6 @@ import com.zero7wrath.clientbase.settings.Setting.ModeSetting;
 import com.zero7wrath.clientbase.settings.Setting.NumberSetting;
 import net.lax1dude.eaglercraft.Keyboard;
 import net.lax1dude.eaglercraft.KeyboardConstants;
-import net.minecraft.client.renderer.GlStateManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -154,18 +153,18 @@ public class ClickGuiScreen extends GuiScreen {
 
         drawPanel(x, y, x + WINDOW_WIDTH, y + SEARCH_HEIGHT);
 
-        drawSmallCaps("Vape", x + 11, y + 12, TEXT);
-        drawSmallCaps("V4", x + 46, y + 12, ACCENT);
+        fontRendererObj.drawString("Vape", x + 11, y + 12, TEXT);
+        fontRendererObj.drawString("V4", x + 46, y + 12, ACCENT);
 
         drawRect(x + 57, y + 12, x + 58, y + 25, 0xFF383638);
 
         if (searchField.getText().length() == 0) {
-            drawSmallCaps("Search", x + 68, y + 12, TEXT_DIM);
+            fontRendererObj.drawString("Search", x + 68, y + 12, TEXT_DIM);
         } else {
             searchField.drawTextBox();
         }
 
-        drawSmallCaps("?", x + WINDOW_WIDTH - 20, y + 11, TEXT_DIM);
+        fontRendererObj.drawString("?", x + WINDOW_WIDTH - 20, y + 11, TEXT_DIM);
     }
 
     private void drawPanel(int x1, int y1, int x2, int y2) {
@@ -183,7 +182,7 @@ public class ClickGuiScreen extends GuiScreen {
         int y = Math.min(mouseY + 8, this.height - 20);
 
         drawRect(x, y, x + width, y + 18, TOOLTIP);
-        drawSmallCaps(text, x + 6, y + 5, TEXT);
+        fontRendererObj.drawString(text, x + 6, y + 5, TEXT);
     }
 
     private boolean isHover(int mouseX, int mouseY, int x, int y, int width, int height) {
@@ -322,10 +321,10 @@ public class ClickGuiScreen extends GuiScreen {
 
             drawPanel(x, y, x + WINDOW_WIDTH, y + height);
 
-            drawSmallCaps(category.name(), x + 12, y + 13, TEXT);
+            fontRendererObj.drawString(category.name(), x + 12, y + 13, TEXT);
 
             String arrow = expanded ? "v" : ">";
-            drawSmallCaps(arrow, x + WINDOW_WIDTH - 19, y + 13, TEXT_DIM);
+            fontRendererObj.drawString(arrow, x + WINDOW_WIDTH - 19, y + 13, TEXT_DIM);
 
             if (!expanded) {
                 return;
@@ -341,11 +340,11 @@ public class ClickGuiScreen extends GuiScreen {
                 drawRect(x + 1, rowY, x + WINDOW_WIDTH - 1, rowY + ROW_HEIGHT, background);
 
                 int textColor = module.isEnabled() ? ENABLED_TEXT : TEXT;
-                drawSmallCaps(module.getName(), x + 12, rowY + 8, textColor);
+                fontRendererObj.drawString(module.getName(), x + 12, rowY + 8, textColor);
 
                 String dots = module.getSettings().isEmpty() ? "" : "...";
                 if (dots.length() > 0) {
-                    drawSmallCaps(
+                    fontRendererObj.drawString(
                             dots,
                             x + WINDOW_WIDTH - 25,
                             rowY + 8,
@@ -384,10 +383,10 @@ public class ClickGuiScreen extends GuiScreen {
             if (setting instanceof BooleanSetting) {
                 BooleanSetting bool = (BooleanSetting) setting;
                 String value = bool.getValue() ? "ON" : "OFF";
-                drawSmallCaps(label, x + 12, rowY + 7, textColor);
+                fontRendererObj.drawString(label, x + 12, rowY + 7, textColor);
 
                 int valueWidth = fontRendererObj.getStringWidth(value);
-                drawSmallCaps(
+                fontRendererObj.drawString(
                         value,
                         x + WINDOW_WIDTH - valueWidth - 12,
                         rowY + 7,
@@ -396,10 +395,10 @@ public class ClickGuiScreen extends GuiScreen {
             } else if (setting instanceof ModeSetting) {
                 ModeSetting mode = (ModeSetting) setting;
                 String value = String.valueOf(mode.getValue());
-                drawSmallCaps(label, x + 12, rowY + 8, textColor);
+                fontRendererObj.drawString(label, x + 12, rowY + 8, textColor);
 
                 int valueWidth = fontRendererObj.getStringWidth(value);
-                drawSmallCaps(
+                fontRendererObj.drawString(
                         value,
                         x + WINDOW_WIDTH - valueWidth - 12,
                         rowY + 7,
@@ -408,11 +407,11 @@ public class ClickGuiScreen extends GuiScreen {
             } else if (setting instanceof NumberSetting) {
                 NumberSetting number = (NumberSetting) setting;
 
-                drawSmallCaps(label, x + 12, rowY + 4, textColor);
+                fontRendererObj.drawString(label, x + 12, rowY + 4, textColor);
 
                 String value = formatNumber(number.getValue());
                 int valueWidth = fontRendererObj.getStringWidth(value);
-                drawSmallCaps(
+                fontRendererObj.drawString(
                         value,
                         x + WINDOW_WIDTH - valueWidth - 12,
                         rowY + 4,
@@ -545,36 +544,6 @@ public class ClickGuiScreen extends GuiScreen {
 
             value = Math.max(setting.getMin(), Math.min(setting.getMax(), value));
             setting.setValue(value);
-        }
-    }
-
-    /**
-     * Draws Minecraft-style small caps: lowercase characters are rendered as
-     * uppercase glyphs at a reduced scale, while existing uppercase text keeps
-     * its normal size.
-     */
-    private void drawSmallCaps(String text, int x, int y, int color) {
-        if (text == null || text.length() == 0) {
-            return;
-        }
-
-        int drawX = x;
-        for (int i = 0; i < text.length(); i++) {
-            char character = text.charAt(i);
-            boolean lower = Character.isLowerCase(character);
-            String glyph = String.valueOf(lower ? Character.toUpperCase(character) : character);
-
-            if (lower) {
-                GlStateManager.pushMatrix();
-                GlStateManager.translate(drawX, y + 2, 0.0F);
-                GlStateManager.scale(1.0F, 0.78F, 1.0F);
-                fontRendererObj.drawString(glyph, 0, 0, color);
-                GlStateManager.popMatrix();
-                drawX += Math.max(1, (int) (fontRendererObj.getStringWidth(glyph) * 0.92F));
-            } else {
-                fontRendererObj.drawString(glyph, drawX, y, color);
-                drawX += fontRendererObj.getStringWidth(glyph);
-            }
         }
     }
 
