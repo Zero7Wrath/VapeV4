@@ -213,7 +213,7 @@ public class ClickGuiScreen extends GuiScreen {
         int panelX = x + SIDEBAR_W + 10;
         int panelY = y;
 
-        if (inside(mouseX, mouseY, x + 7, y + 309, x + SIDEBAR_W - 7, y + 333) && mouseButton == 0) {
+        if (inside(mouseX, mouseY, x + 7, y + 334, x + SIDEBAR_W - 7, y + 358) && mouseButton == 0) {
             mc.displayGuiScreen(new ConfigScreen());
             return;
         }
