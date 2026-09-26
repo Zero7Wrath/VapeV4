@@ -32,21 +32,22 @@ import java.util.List;
 public class ClickGuiScreen extends GuiScreen {
 
     private static final int WINDOW_WIDTH = 220;
-    private static final int HEADER_HEIGHT = 41;
-    private static final int ROW_HEIGHT = 27;
-    private static final int SEARCH_HEIGHT = 37;
+    private static final int HEADER_HEIGHT = 36;
+    private static final int ROW_HEIGHT = 25;
+    private static final int SEARCH_HEIGHT = 34;
+    private static final int CORNER = 5;
     private static final int WINDOW_GAP = 10;
 
-    private static final int MAIN = 0xFF1A191A;
-    private static final int MAIN_DARK = 0xFF151415;
-    private static final int ROW = 0xFF1A191A;
-    private static final int ROW_HOVER = 0xFF252426;
-    private static final int BORDER = 0xCC555555;
+    private static final int MAIN = 0xF51B1A1C;
+    private static final int MAIN_DARK = 0xFF161517;
+    private static final int ROW = 0xFF1B1A1C;
+    private static final int ROW_HOVER = 0xFF252326;
+    private static final int BORDER = 0xD03A393B;
     private static final int TEXT = 0xFFC8C8C8;
     private static final int TEXT_DIM = 0xFF8C8C8C;
-    private static final int ACCENT = 0xFFB8B8B8;
-    private static final int ENABLED = 0xFFB8B8B8;
-    private static final int ENABLED_TEXT = 0xFF1A191A;
+    private static final int ACCENT = 0xFFFFFFFF;
+    private static final int ENABLED = 0xFFE8E8E8;
+    private static final int ENABLED_TEXT = 0xFF181719;
     private static final int TOOLTIP = 0xF0181718;
 
     private final List<CategoryPanel> panels = new ArrayList<CategoryPanel>();
@@ -152,26 +153,27 @@ public class ClickGuiScreen extends GuiScreen {
 
         drawPanel(x, y, x + WINDOW_WIDTH, y + SEARCH_HEIGHT);
 
-        fontRendererObj.drawString("Vape", x + 9, y + 14, TEXT);
-        fontRendererObj.drawString("V4", x + 44, y + 14, ACCENT);
+        fontRendererObj.drawString("Vape", x + 11, y + 12, TEXT);
+        fontRendererObj.drawString("V4", x + 46, y + 12, ACCENT);
 
         drawRect(x + 57, y + 12, x + 58, y + 25, 0xFF383638);
 
         if (searchField.getText().length() == 0) {
-            fontRendererObj.drawString("Search", x + 67, y + 14, TEXT_DIM);
+            fontRendererObj.drawString("Search", x + 68, y + 12, TEXT_DIM);
         } else {
             searchField.drawTextBox();
         }
 
-        fontRendererObj.drawString("⌕", x + WINDOW_WIDTH - 20, y + 12, TEXT_DIM);
+        fontRendererObj.drawString("?", x + WINDOW_WIDTH - 20, y + 11, TEXT_DIM);
     }
 
     private void drawPanel(int x1, int y1, int x2, int y2) {
-        drawRect(x1, y1, x2, y2, MAIN);
-        drawRect(x1, y1, x2, y1 + 1, BORDER);
-        drawRect(x1, y2 - 1, x2, y2, BORDER);
-        drawRect(x1, y1, x1 + 1, y2, BORDER);
-        drawRect(x2 - 1, y1, x2, y2, BORDER);
+        drawRect(x1 + CORNER, y1, x2 - CORNER, y2, MAIN);
+        drawRect(x1, y1 + CORNER, x2, y2 - CORNER, MAIN);
+        drawRect(x1 + 2, y1 + 2, x2 - 2, y1 + 3, BORDER);
+        drawRect(x1 + 2, y2 - 3, x2 - 2, y2 - 2, BORDER);
+        drawRect(x1 + 2, y1 + 2, x1 + 3, y2 - 2, BORDER);
+        drawRect(x2 - 3, y1 + 2, x2 - 2, y2 - 2, BORDER);
     }
 
     private void drawTooltip(String text, int mouseX, int mouseY) {
@@ -319,10 +321,10 @@ public class ClickGuiScreen extends GuiScreen {
 
             drawPanel(x, y, x + WINDOW_WIDTH, y + height);
 
-            fontRendererObj.drawString(category.name(), x + 12, y + 15, TEXT);
+            fontRendererObj.drawString(category.name(), x + 12, y + 13, TEXT);
 
             String arrow = expanded ? "v" : ">";
-            fontRendererObj.drawString(arrow, x + WINDOW_WIDTH - 19, y + 15, TEXT_DIM);
+            fontRendererObj.drawString(arrow, x + WINDOW_WIDTH - 19, y + 13, TEXT_DIM);
 
             if (!expanded) {
                 return;
@@ -338,14 +340,14 @@ public class ClickGuiScreen extends GuiScreen {
                 drawRect(x + 1, rowY, x + WINDOW_WIDTH - 1, rowY + ROW_HEIGHT, background);
 
                 int textColor = module.isEnabled() ? ENABLED_TEXT : TEXT;
-                fontRendererObj.drawString(module.getName(), x + 12, rowY + 9, textColor);
+                fontRendererObj.drawString(module.getName(), x + 12, rowY + 8, textColor);
 
                 String dots = module.getSettings().isEmpty() ? "" : "...";
                 if (dots.length() > 0) {
                     fontRendererObj.drawString(
                             dots,
                             x + WINDOW_WIDTH - 25,
-                            rowY + 9,
+                            rowY + 8,
                             module.open ? TEXT : TEXT_DIM
                     );
                 }
@@ -381,13 +383,13 @@ public class ClickGuiScreen extends GuiScreen {
             if (setting instanceof BooleanSetting) {
                 BooleanSetting bool = (BooleanSetting) setting;
                 String value = bool.getValue() ? "ON" : "OFF";
-                fontRendererObj.drawString(label, x + 12, rowY + 8, textColor);
+                fontRendererObj.drawString(label, x + 12, rowY + 7, textColor);
 
                 int valueWidth = fontRendererObj.getStringWidth(value);
                 fontRendererObj.drawString(
                         value,
                         x + WINDOW_WIDTH - valueWidth - 12,
-                        rowY + 8,
+                        rowY + 7,
                         bool.getValue() ? TEXT : TEXT_DIM
                 );
             } else if (setting instanceof ModeSetting) {
@@ -399,25 +401,25 @@ public class ClickGuiScreen extends GuiScreen {
                 fontRendererObj.drawString(
                         value,
                         x + WINDOW_WIDTH - valueWidth - 12,
-                        rowY + 8,
+                        rowY + 7,
                         ACCENT
                 );
             } else if (setting instanceof NumberSetting) {
                 NumberSetting number = (NumberSetting) setting;
 
-                fontRendererObj.drawString(label, x + 12, rowY + 5, textColor);
+                fontRendererObj.drawString(label, x + 12, rowY + 4, textColor);
 
                 String value = formatNumber(number.getValue());
                 int valueWidth = fontRendererObj.getStringWidth(value);
                 fontRendererObj.drawString(
                         value,
                         x + WINDOW_WIDTH - valueWidth - 12,
-                        rowY + 5,
+                        rowY + 4,
                         ACCENT
                 );
 
                 int barX = x + 12;
-                int barY = rowY + 19;
+                int barY = rowY + 17;
                 int barWidth = WINDOW_WIDTH - 24;
 
                 drawRect(barX, barY, barX + barWidth, barY + 2, 0xFF454345);
