@@ -1357,6 +1357,10 @@ public class Minecraft implements IThreadListener {
             this.myNetworkManager.processReceivedPackets();
         }
 
+        if (Client.INSTANCE != null) {
+            Client.INSTANCE.onPostTick();
+        }
+
         if (this.world == null) {
             if (currentScreen != null && currentScreen.shouldHangupIntegratedServer()) {
                 if (SingleplayerServerController.hangupEaglercraftServer()) {
