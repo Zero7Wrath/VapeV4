@@ -10,8 +10,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.MinecraftError;
+import net.minecraft.util.ResourceLocation;
 
 public class LoadingScreenRenderer implements IProgressUpdate {
+	private static final ResourceLocation VAPE_MOJANG_LOADING = new ResourceLocation("textures/gui/title/mojang.png");
 	private String message = "";
 
 	/** A reference to the Minecraft object. */
@@ -120,6 +122,19 @@ public class LoadingScreenRenderer implements IProgressUpdate {
 				GlStateManager.clear(16640);
 
 				Tessellator tessellator = Tessellator.getInstance();
+				GlStateManager.enableTexture2D();
+				this.mc.getTextureManager().bindTexture(VAPE_MOJANG_LOADING);
+				int logoSize = Math.min(96, Math.max(64, k / 8));
+				int logoX = (k - logoSize) / 2;
+				int logoY = Math.max(10, l / 2 - 82);
+				bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+				bufferbuilder.pos(logoX, logoY + logoSize, 0.0D).tex(0.0D, 1.0D).color(255, 255, 255, 255).endVertex();
+				bufferbuilder.pos(logoX + logoSize, logoY + logoSize, 0.0D).tex(1.0D, 1.0D).color(255, 255, 255, 255).endVertex();
+				bufferbuilder.pos(logoX + logoSize, logoY, 0.0D).tex(1.0D, 0.0D).color(255, 255, 255, 255).endVertex();
+				bufferbuilder.pos(logoX, logoY, 0.0D).tex(0.0D, 0.0D).color(255, 255, 255, 255).endVertex();
+				tessellator.draw();
+				this.mc.fontRendererObj.drawStringWithShadow("VAPE V4", floatAtCenter(k, "VAPE V4"), Math.max(4.0F, logoY - 16.0F), 0xFFFFFFFF);
+				this.mc.fontRendererObj.drawStringWithShadow("EAGLERCRAFT EDITION", floatAtCenter(k, "EAGLERCRAFT EDITION"), logoY + logoSize + 4.0F, 0xFFAAAAAA);
 				WorldRenderer bufferbuilder = tessellator.getBuffer();
 				this.mc.getTextureManager().bindTexture(Gui.OPTIONS_BACKGROUND);
 				float f = 32.0F;
@@ -169,6 +184,10 @@ public class LoadingScreenRenderer implements IProgressUpdate {
 				this.mc.updateDisplay();
 			}
 		}
+	}
+
+	private float floatAtCenter(int width, String text) {
+		return (float) ((width - this.mc.fontRendererObj.getStringWidth(text)) / 2);
 	}
 
 	public void setDoneWorking() {
