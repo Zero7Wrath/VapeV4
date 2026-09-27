@@ -41,12 +41,19 @@ import com.zero7wrath.clientbase.modules.features.AutoTool;
 import com.zero7wrath.clientbase.modules.features.Criticals;
 import com.zero7wrath.clientbase.modules.features.AutoWeapon;
 import com.zero7wrath.clientbase.modules.features.Reach;
+import com.zero7wrath.clientbase.modules.features.NoWeather;
+import com.zero7wrath.clientbase.modules.features.AutoRespawn;
+import com.zero7wrath.clientbase.modules.features.AirJump;
+import com.zero7wrath.clientbase.modules.features.NoPush;
+import com.zero7wrath.clientbase.modules.features.NoHurtCam;
+import net.lax1dude.eaglercraft.Keyboard;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Manager {
     private final ArrayList<Module> modules = new ArrayList<Module>();
+    private final ArrayList<Module> keyDown = new ArrayList<Module>();
 
     public void init() {
         modules.clear();
@@ -63,6 +70,8 @@ public class Manager {
         register(new AutoClicker()); register(new AimAssist()); register(new KeepSprint());
         register(new NoClickDelay()); register(new FastPlace()); register(new AutoTool());
         register(new Parkour()); register(new SafeWalk());
+        register(new NoWeather()); register(new AutoRespawn()); register(new AirJump());
+        register(new NoPush()); register(new NoHurtCam());
         registerUniversal(Category.Blatant, new String[]{"Timer"});
         
         registerUniversal(Category.Legit, new String[]{"Atmosphere","Breadcrumbs","Cape","ChinaHat","Clock","Disguise","FOV","FPS","Keystrokes","Memory","Ping","SongBeats","Speedmeter","TimeChanger"});
@@ -82,7 +91,17 @@ public class Manager {
     }
 
     public void onTick() {
-        for (Module module : modules) if (module.isEnabled()) module.onUpdate();
+        for (Module module : modules) {
+            if (module.getKeyBind() >= 0 && Keyboard.isKeyDown(module.getKeyBind())) {
+                if (!keyDown.contains(module)) {
+                    module.toggle();
+                    keyDown.add(module);
+                }
+            } else {
+                keyDown.remove(module);
+            }
+            if (module.isEnabled()) module.onUpdate();
+        }
     }
 
     public ArrayList<Module> getModules() { return new ArrayList<Module>(modules); }
