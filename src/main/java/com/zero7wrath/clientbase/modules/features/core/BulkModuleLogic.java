@@ -110,7 +110,7 @@ public final class BulkModuleLogic {
             case 6: mc.player.rotationPitch = 0.0F; break;
             case 7: mc.player.rotationYaw = Math.round(mc.player.rotationYaw / 45.0F) * 45.0F; break;
             case 8: mc.player.setSneaking(false); break;
-            case 9: mc.gameSettings.keyBindForward.pressed = true; break;
+            case 9: mc.player.moveForward = 1.0F; break;
         }
     }
 
