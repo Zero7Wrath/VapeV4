@@ -425,4 +425,34 @@ public final class ClientModules {
         @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Client, 69); }
     }
 
+
+    public static class GuiThemeV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public GuiThemeV2() { super("GuiThemeV2", "Client module: GuiThemeV2.", Category.Client); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Client, 70); }
+    }
+
+    public static class GuiScaleV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public GuiScaleV2() { super("GuiScaleV2", "Client module: GuiScaleV2.", Category.Client); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Client, 71); }
+    }
+
+    public static class GuiBlurV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public GuiBlurV2() { super("GuiBlurV2", "Client module: GuiBlurV2.", Category.Client); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Client, 72); }
+    }
+
+    public static class ModuleSearchV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public ModuleSearchV2() { super("ModuleSearchV2", "Client module: ModuleSearchV2.", Category.Client); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Client, 73); }
+    }
+
+    public static class ModuleSortV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public ModuleSortV2() { super("ModuleSortV2", "Client module: ModuleSortV2.", Category.Client); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Client, 74); }
+    }
 }
