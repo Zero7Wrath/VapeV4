@@ -23,7 +23,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import com.zero7wrath.clientbase.Client;
-import com.zero7wrath.clientbase.modules.features.Reach;
+import com.zero7wrath.clientbase.modules.features.combat.Reach;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.MapItemRenderer;
