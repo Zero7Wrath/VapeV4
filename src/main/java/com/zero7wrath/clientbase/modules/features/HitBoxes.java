@@ -20,6 +20,6 @@ public class HitBoxes extends Module {
     public AxisAlignedBB getBox(Entity entity) {
         if (!(entity instanceof EntityPlayer) || entity == mc.player) return entity.getEntityBoundingBox();
         double e = expand.getValue();
-        return entity.getEntityBoundingBox().grow(e, e, e);
+        return entity.getEntityBoundingBox().expand(e, e, e);
     }
 }
