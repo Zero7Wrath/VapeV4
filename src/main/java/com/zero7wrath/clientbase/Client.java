@@ -18,6 +18,7 @@ public class Client {
     public static int getGuiKey() { return guiKey; }
     public static void setGuiKey(int key) { guiKey = key; }
     public static boolean isBindingGuiKey() { return bindingGuiKey; }
+    public Manager getManager() { return manager; }
     public static void setBindingGuiKey(boolean binding) { bindingGuiKey = binding; }
 
     public void init() {
