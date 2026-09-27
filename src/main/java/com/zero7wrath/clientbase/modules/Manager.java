@@ -28,6 +28,16 @@ import com.zero7wrath.clientbase.modules.features.Phase;
 import com.zero7wrath.clientbase.modules.features.NoFall;
 import com.zero7wrath.clientbase.modules.features.Velocity;
 import com.zero7wrath.clientbase.modules.features.AutoClicker;
+import com.zero7wrath.clientbase.modules.features.AimAssist;
+import com.zero7wrath.clientbase.modules.features.NoJumpDelay;
+import com.zero7wrath.clientbase.modules.features.NoSlowdown;
+import com.zero7wrath.clientbase.modules.features.Parkour;
+import com.zero7wrath.clientbase.modules.features.SafeWalk;
+import com.zero7wrath.clientbase.modules.features.AutoJump;
+import com.zero7wrath.clientbase.modules.features.KeepSprint;
+import com.zero7wrath.clientbase.modules.features.NoClickDelay;
+import com.zero7wrath.clientbase.modules.features.FastPlace;
+import com.zero7wrath.clientbase.modules.features.AutoTool;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,13 +55,17 @@ public class Manager {
         register(new MouseTP()); register(new Spider()); register(new SpinBot()); register(new Swim());
         register(new TargetStrafe()); register(new Wallhop()); register(new Gravity()); register(new TimeChanger());
         register(new FOV()); register(new TriggerBot());
-        register(new Speed()); register(new Phase()); register(new NoFall()); register(new Velocity()); register(new AutoClicker());
+        register(new Speed()); register(new Phase()); register(new NoFall()); register(new Velocity());
+        register(new NoJumpDelay()); register(new NoSlowdown()); register(new AutoJump());
+        register(new AutoClicker()); register(new AimAssist()); register(new KeepSprint());
+        register(new NoClickDelay()); register(new FastPlace()); register(new AutoTool());
+        register(new Parkour()); register(new SafeWalk());
         registerUniversal(Category.Blatant, new String[]{"AntiFall","Fly","HighJump","HitBoxes","Invisible","Jesus","Killaura","LongJump","MouseTP","Phase","Speed","Spider","SpinBot","Swim","TargetStrafe","Timer"});
-        registerUniversal(Category.Combat, new String[]{"AimAssist","AutoClicker","Reach","SilentAim","TriggerBot"});
+        registerUniversal(Category.Combat, new String[]{"Reach","SilentAim","ProjectileAimbot","ProjectileAura"});
         registerUniversal(Category.Legit, new String[]{"Atmosphere","Breadcrumbs","Cape","ChinaHat","Clock","Disguise","FOV","FPS","Keystrokes","Memory","Ping","SongBeats","Speedmeter","TimeChanger"});
         registerUniversal(Category.Render, new String[]{"Arrows","Chams","ESP","Fullbright","GamingChair","Health","NameTags","PlayerModel","Radar","Search","SessionInfo","Spotify","Tracers","Waypoints"});
         registerUniversal(Category.Utility, new String[]{"AnimationPlayer","AntiRagdoll","AutoRejoin","Blink","ChatSpammer","Disabler","HumSpoofer","Panic","Rejoin","ServerHop","StaffDetector"});
-        registerUniversal(Category.World, new String[]{"Anti-AFK","AutoTool","BedProtector","ChestSteal","Freecam","Gravity","Parkour","SafeWalk","Xray"});
+        registerUniversal(Category.World, new String[]{"Anti-AFK","BedProtector","ChestSteal","Freecam","Gravity","Xray"});
         registerUniversal(Category.Inventory, new String[]{"AutoBuy","AutoConsume","AutoHotbar","FastConsume","FastDrop"});
     }
 
