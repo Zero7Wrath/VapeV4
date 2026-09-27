@@ -4,7 +4,6 @@ import com.zero7wrath.clientbase.Category;
 import com.zero7wrath.clientbase.modules.features.ClickGui;
 import com.zero7wrath.clientbase.modules.features.FullBright;
 import com.zero7wrath.clientbase.modules.features.Sprint;
-import com.zero7wrath.clientbase.modules.features.UniversalModule;
 import com.zero7wrath.clientbase.modules.features.AntiFall;
 import com.zero7wrath.clientbase.modules.features.Fly;
 import com.zero7wrath.clientbase.modules.features.HighJump;
@@ -71,17 +70,6 @@ public class Manager {
         register(new Parkour()); register(new SafeWalk());
         register(new NoWeather()); register(new AutoRespawn()); register(new AirJump());
         register(new NoHurtCam());
-        registerUniversal(Category.Blatant, new String[]{"Timer"});
-        
-        registerUniversal(Category.Legit, new String[]{"Atmosphere","Breadcrumbs","Cape","ChinaHat","Clock","Disguise","FOV","FPS","Keystrokes","Memory","Ping","SongBeats","Speedmeter","TimeChanger"});
-        registerUniversal(Category.Render, new String[]{"Arrows","Chams","ESP","Fullbright","GamingChair","Health","NameTags","PlayerModel","Radar","Search","SessionInfo","Spotify","Tracers","Waypoints"});
-        registerUniversal(Category.Utility, new String[]{"AnimationPlayer","AntiRagdoll","AutoRejoin","Panic"});
-        registerUniversal(Category.World, new String[]{"Anti-AFK","BedProtector","ChestSteal","Freecam","Gravity","Xray"});
-        registerUniversal(Category.Inventory, new String[]{"AutoBuy","AutoConsume","AutoHotbar","FastConsume","FastDrop"});
-    }
-
-    private void registerUniversal(Category category, String[] names) {
-        for (String name : names) register(new UniversalModule(name, category));
     }
 
     public void register(Module module) {
