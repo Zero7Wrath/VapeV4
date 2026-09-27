@@ -1,5 +1,7 @@
 package net.minecraft.client.entity;
 
+import com.zero7wrath.clientbase.Client;
+
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -954,6 +956,12 @@ public class EntityPlayerSP extends AbstractClientPlayer {
 		}
 
 		super.onLivingUpdate();
+
+		// Vape V4 client modules run from the local player tick so movement/input changes
+		// are applied in the normal Eaglercraft player update path.
+		if (Client.INSTANCE != null && Client.INSTANCE.getManager() != null) {
+			Client.INSTANCE.getManager().onTick();
+		}
 
 		if (this.onGround && this.capabilities.isFlying && !this.mc.playerController.isSpectatorMode()) {
 			this.capabilities.isFlying = false;
