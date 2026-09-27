@@ -40,6 +40,7 @@ import com.zero7wrath.clientbase.modules.features.FastPlace;
 import com.zero7wrath.clientbase.modules.features.AutoTool;
 import com.zero7wrath.clientbase.modules.features.Criticals;
 import com.zero7wrath.clientbase.modules.features.AutoWeapon;
+import com.zero7wrath.clientbase.modules.features.Reach;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +57,7 @@ public class Manager {
         register(new Invisible()); register(new Jesus()); register(new Killaura()); register(new LongJump());
         register(new MouseTP()); register(new Spider()); register(new SpinBot()); register(new Swim());
         register(new TargetStrafe()); register(new Wallhop()); register(new Gravity()); register(new TimeChanger());
-        register(new FOV()); register(new TriggerBot()); register(new Criticals()); register(new AutoWeapon());
+        register(new FOV()); register(new TriggerBot()); register(new Criticals()); register(new AutoWeapon()); register(new Reach());
         register(new Speed()); register(new Phase()); register(new NoFall()); register(new Velocity());
         register(new NoJumpDelay()); register(new NoSlowdown()); register(new AutoJump());
         register(new AutoClicker()); register(new AimAssist()); register(new KeepSprint());
@@ -66,7 +67,7 @@ public class Manager {
         
         registerUniversal(Category.Legit, new String[]{"Atmosphere","Breadcrumbs","Cape","ChinaHat","Clock","Disguise","FOV","FPS","Keystrokes","Memory","Ping","SongBeats","Speedmeter","TimeChanger"});
         registerUniversal(Category.Render, new String[]{"Arrows","Chams","ESP","Fullbright","GamingChair","Health","NameTags","PlayerModel","Radar","Search","SessionInfo","Spotify","Tracers","Waypoints"});
-        registerUniversal(Category.Utility, new String[]{"AnimationPlayer","AntiRagdoll","AutoRejoin","Blink","ChatSpammer","Disabler","HumSpoofer","Panic","Rejoin","ServerHop","StaffDetector"});
+        registerUniversal(Category.Utility, new String[]{"AnimationPlayer","AntiRagdoll","AutoRejoin","Panic"});
         registerUniversal(Category.World, new String[]{"Anti-AFK","BedProtector","ChestSteal","Freecam","Gravity","Xray"});
         registerUniversal(Category.Inventory, new String[]{"AutoBuy","AutoConsume","AutoHotbar","FastConsume","FastDrop"});
     }
