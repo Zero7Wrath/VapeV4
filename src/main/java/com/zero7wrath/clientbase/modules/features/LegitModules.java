@@ -425,4 +425,34 @@ public final class LegitModules {
         @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Legit, 69); }
     }
 
+
+    public static class LegitAimV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public LegitAimV2() { super("LegitAimV2", "Legit module: LegitAimV2.", Category.Legit); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Legit, 70); }
+    }
+
+    public static class LegitCameraV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public LegitCameraV2() { super("LegitCameraV2", "Legit module: LegitCameraV2.", Category.Legit); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Legit, 71); }
+    }
+
+    public static class LegitMotionV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public LegitMotionV2() { super("LegitMotionV2", "Legit module: LegitMotionV2.", Category.Legit); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Legit, 72); }
+    }
+
+    public static class LegitViewV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public LegitViewV2() { super("LegitViewV2", "Legit module: LegitViewV2.", Category.Legit); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Legit, 73); }
+    }
+
+    public static class LegitStrafeV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public LegitStrafeV2() { super("LegitStrafeV2", "Legit module: LegitStrafeV2.", Category.Legit); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Legit, 74); }
+    }
 }
