@@ -425,4 +425,34 @@ public final class CombatModules {
         @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Combat, 69); }
     }
 
+
+    public static class TargetPriorityV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public TargetPriorityV2() { super("TargetPriorityV2", "Combat module: TargetPriorityV2.", Category.Combat); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Combat, 70); }
+    }
+
+    public static class AimCurveV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public AimCurveV2() { super("AimCurveV2", "Combat module: AimCurveV2.", Category.Combat); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Combat, 71); }
+    }
+
+    public static class TargetRangeV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public TargetRangeV2() { super("TargetRangeV2", "Combat module: TargetRangeV2.", Category.Combat); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Combat, 72); }
+    }
+
+    public static class RotationAssistV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public RotationAssistV2() { super("RotationAssistV2", "Combat module: RotationAssistV2.", Category.Combat); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Combat, 73); }
+    }
+
+    public static class FocusTargetV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public FocusTargetV2() { super("FocusTargetV2", "Combat module: FocusTargetV2.", Category.Combat); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Combat, 74); }
+    }
 }
