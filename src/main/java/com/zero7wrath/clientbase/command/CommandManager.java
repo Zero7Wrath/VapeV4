@@ -53,8 +53,29 @@ public final class CommandManager {
             return true;
         }
 
+        if ("rgb".equals(command)) {
+            com.zero7wrath.clientbase.gui.GuiTheme.setMode("RGB");
+            com.zero7wrath.clientbase.config.ConfigManager.save("default");
+            say("GUI theme set to RGB");
+            return true;
+        }
+
+        if ("rainbow".equals(command)) {
+            com.zero7wrath.clientbase.gui.GuiTheme.setMode("RAINBOW");
+            com.zero7wrath.clientbase.config.ConfigManager.save("default");
+            say("GUI theme set to Rainbow");
+            return true;
+        }
+
+        if ("green".equals(command)) {
+            com.zero7wrath.clientbase.gui.GuiTheme.setMode("GREEN");
+            com.zero7wrath.clientbase.config.ConfigManager.save("default");
+            say("GUI theme set to Green");
+            return true;
+        }
+
         if ("help".equals(command) || "commands".equals(command)) {
-            say(".toggle <module>  .bind <module> <key>  .vapegui");
+            say(".toggle <module>  .bind <module> <key>  .vapegui  .rgb  .rainbow");
             return true;
         }
 
