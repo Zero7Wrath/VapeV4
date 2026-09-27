@@ -132,6 +132,10 @@ public class ClickGuiScreen extends GuiScreen {
         String categoryName = pretty(categories[selectedCategory]);
         fontRendererObj.drawString(categoryName, x + 14, y + 12, TEXT);
         fontRendererObj.drawString(GuiTheme.getMode(), x + 160, y + 12, GuiTheme.accent());
+        fontRendererObj.drawString("RMB = bind", x + 14, y + 27, DIM);
+        if (bindingModule != null) {
+            fontRendererObj.drawString("Press a key for " + bindingModule.getName(), x + 170, y + 27, GuiTheme.accent());
+        }
         fontRendererObj.drawString(filteredModules().size() + " modules", x + 14, y + 27, DIM);
 
         search.drawTextBox();
