@@ -51,7 +51,8 @@ public class Manager {
         registerUniversal(Category.Legit, new String[]{"Atmosphere","Breadcrumbs","Cape","ChinaHat","Clock","Disguise","FOV","FPS","Keystrokes","Memory","Ping","SongBeats","Speedmeter","TimeChanger"});
         registerUniversal(Category.Render, new String[]{"Arrows","Chams","ESP","Fullbright","GamingChair","Health","NameTags","PlayerModel","Radar","Search","SessionInfo","Spotify","Tracers","Waypoints"});
         registerUniversal(Category.Utility, new String[]{"AnimationPlayer","AntiRagdoll","AutoRejoin","Blink","ChatSpammer","Disabler","HumSpoofer","Panic","Rejoin","ServerHop","StaffDetector"});
-        registerUniversal(Category.World, new String[]{"Anti-AFK","FastProxPrompt","Freecam","Gravity","MurderMystery","Parkour","SafeWalk","Wallhop","Xray"});
+        registerUniversal(Category.World, new String[]{"Anti-AFK","AutoTool","BedProtector","ChestSteal","Freecam","Gravity","Parkour","SafeWalk","Xray"});
+        registerUniversal(Category.Inventory, new String[]{"AutoBuy","AutoConsume","AutoHotbar","FastConsume","FastDrop"});
     }
 
     private void registerUniversal(Category category, String[] names) {
