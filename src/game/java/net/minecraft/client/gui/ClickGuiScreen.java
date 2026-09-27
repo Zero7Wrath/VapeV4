@@ -357,12 +357,12 @@ public class ClickGuiScreen extends GuiScreen {
     }
 
     @Override
-    public void updateScreen() {
-        if (dragging) {
+    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
+        if (dragging && clickedMouseButton == 0) {
             guiX = mouseX - dragOffsetX;
             guiY = mouseY - dragOffsetY;
         }
-        super.updateScreen();
+        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
     }
 
     @Override
