@@ -9,6 +9,7 @@ import net.lax1dude.eaglercraft.minecraft.GuiScreenVisualViewport;
 import net.lax1dude.eaglercraft.notifications.GuiButtonNotifBell;
 import net.lax1dude.eaglercraft.notifications.GuiScreenNotifications;
 import net.minecraft.client.Minecraft;
+import com.zero7wrath.clientbase.command.CommandManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ITabCompleter;
 import net.minecraft.util.TabCompleter;
