@@ -425,4 +425,34 @@ public final class BlatantModules {
         @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Blatant, 69); }
     }
 
+
+    public static class SprintBoostV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public SprintBoostV2() { super("SprintBoostV2", "Blatant module: SprintBoostV2.", Category.Blatant); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Blatant, 70); }
+    }
+
+    public static class JumpControlV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public JumpControlV2() { super("JumpControlV2", "Blatant module: JumpControlV2.", Category.Blatant); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Blatant, 71); }
+    }
+
+    public static class AirStrafeV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public AirStrafeV2() { super("AirStrafeV2", "Blatant module: AirStrafeV2.", Category.Blatant); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Blatant, 72); }
+    }
+
+    public static class MoveBoostV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public MoveBoostV2() { super("MoveBoostV2", "Blatant module: MoveBoostV2.", Category.Blatant); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Blatant, 73); }
+    }
+
+    public static class StepControlV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public StepControlV2() { super("StepControlV2", "Blatant module: StepControlV2.", Category.Blatant); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Blatant, 74); }
+    }
 }
