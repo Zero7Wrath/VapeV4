@@ -452,7 +452,6 @@ public class GuiMainMenu extends GuiScreen {
 
 		drawRect(left + 16, top + 66, left + cardW - 16, top + 67, 0xFF292C2F);
 
-		String[] labels = {"PLAY", "MULTIPLAYER", "REALMS", "SKINS", "OPTIONS", "PROFILE", "CREDITS"};
 		for (GuiButton button : this.buttonList) {
 			if (button.id == 5 || !button.visible) continue;
 			boolean hover = mouseX >= button.xPosition && mouseX <= button.xPosition + button.width
@@ -472,7 +471,8 @@ public class GuiMainMenu extends GuiScreen {
 		this.drawCenteredString(this.fontRendererObj, "Minecraft 1.12.2", this.width / 2, top + 290, 0xFF777B80);
 		this.drawCenteredString(this.fontRendererObj, "Vape V4 port by Zero7Wrath", this.width / 2, top + 304, 0xFF565A5E);
 
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.drawCenteredString(this.fontRendererObj, "Minecraft 1.12.2", this.width / 2, top + 290, 0xFF777B80);
+		this.drawCenteredString(this.fontRendererObj, "Vape V4 port by Zero7Wrath", this.width / 2, top + 304, 0xFF565A5E);
 	}
 	/**
 	 * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
