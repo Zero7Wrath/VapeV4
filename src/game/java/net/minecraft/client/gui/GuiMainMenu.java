@@ -173,10 +173,9 @@ public class GuiMainMenu extends GuiScreen {
 		this.buttonList.add(new GuiButton(1, x, top, w, 24, "PLAY"));
 		this.buttonList.add(new GuiButton(2, x, top + 30, half, 24, "MULTIPLAYER"));
 		this.buttonList.add(new GuiButton(15, x + 159, top + 30, half, 24, "REALMS"));
-		this.buttonList.add(new GuiButton(6, x, top + 60, half, 24, "SKINS"));
-		this.buttonList.add(new GuiButton(0, x + 159, top + 60, half, 24, "OPTIONS"));
-		this.buttonList.add(new GuiButton(4, x, top + 90, half, 24, "PROFILE"));
-		this.buttonList.add(new GuiButton(14, x + 159, top + 90, half, 24, "CREDITS"));
+		this.buttonList.add(new GuiButton(4, x, top + 60, half, 24, "PROFILE"));
+		this.buttonList.add(new GuiButton(16, x + 159, top + 60, half, 24, "ALTS"));
+		this.buttonList.add(new GuiButton(0, x, top + 90, half, 24, "OPTIONS"));
 		this.buttonList.add(new GuiButtonLanguage(5, x - 24, top + 124));
 	}
 
@@ -224,10 +223,8 @@ public class GuiMainMenu extends GuiScreen {
 			this.mc.displayGuiScreen(new GuiVapeRealms(this));
 		} else if (button.id == 4) {
 			this.mc.displayGuiScreen(new GuiScreenEditProfile(this));
-		} else if (button.id == 6) {
-			this.mc.displayGuiScreen(new GuiCustomizeSkin(this));
-		} else if (button.id == 14) {
-			this.mc.displayGuiScreen(new GuiCredits(this, "/assets/eagler/credits.txt"));
+		} else if (button.id == 16) {
+			this.mc.displayGuiScreen(new GuiVapeAlts(this));
 		} else if (button.id == 11) {
 			this.mc.launchIntegratedServer("Demo_World", "Demo_World", WorldServerDemo.DEMO_WORLD_SETTINGS);
 		} else if (button.id == 12) {
