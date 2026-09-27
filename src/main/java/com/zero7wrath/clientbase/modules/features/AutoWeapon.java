@@ -21,9 +21,9 @@ public class AutoWeapon extends Module {
         float bestDamage = -1.0F;
         for (int i = 0; i < 9; i++) {
             ItemStack stack = mc.player.inventory.getStackInSlot(i);
-            if (stack.isEmpty()) continue;
+            if (stack.func_190926_b()) continue;
             Item item = stack.getItem();
-            float damage = item instanceof ItemSword ? ((ItemSword)item).getAttackDamage() : 0.0F;
+            float damage = item instanceof ItemSword ? ((ItemSword)item).getAttackDamage(mc.player) : 0.0F;
             if (damage > bestDamage) {
                 bestDamage = damage;
                 best = i;
