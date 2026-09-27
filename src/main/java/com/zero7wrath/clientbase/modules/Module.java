@@ -11,6 +11,7 @@ public abstract class Module {
     private final String description;
     private final Category category;
     private boolean enabled;
+    private int keyBind = -1;
 
     public boolean open;
 
@@ -58,6 +59,14 @@ public abstract class Module {
 
     public void toggle() {
         setEnabled(!enabled);
+    }
+
+    public int getKeyBind() {
+        return keyBind;
+    }
+
+    public void setKeyBind(int keyBind) {
+        this.keyBind = keyBind;
     }
 
     public ArrayList<Setting<?>> getSettings() {
