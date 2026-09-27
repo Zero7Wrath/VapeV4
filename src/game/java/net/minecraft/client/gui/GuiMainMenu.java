@@ -165,19 +165,19 @@ public class GuiMainMenu extends GuiScreen {
 		this.field_193978_M = this.fontRendererObj.getStringWidth("Resources copyright Mojang AB");
 		this.field_193979_N = this.width - this.field_193978_M - 2;
 
-		int top = this.height / 4 + 42;
-		int w = 202;
-		int gap = 4;
+		int top = this.height / 2 - 92;
+		int w = 310;
+		int half = 151;
 		int x = this.width / 2 - w / 2;
 
-		this.buttonList.add(new GuiButton(1, x, top, w, 20, "PLAY"));
-		this.buttonList.add(new GuiButton(2, x, top + 24, 99, 20, "MULTIPLAYER"));
-		this.buttonList.add(new GuiButton(15, x + 103, top + 24, 99, 20, "REALMS"));
-		this.buttonList.add(new GuiButton(6, x, top + 48, w, 20, "SKINS"));
-		this.buttonList.add(new GuiButton(0, x, top + 72, w, 20, "OPTIONS"));
-		this.buttonList.add(new GuiButton(4, x, top + 96, 99, 20, "PROFILE"));
-		this.buttonList.add(new GuiButton(14, x + 103, top + 96, 99, 20, "CREDITS"));
-		this.buttonList.add(new GuiButtonLanguage(5, x - 24, top + 120));
+		this.buttonList.add(new GuiButton(1, x, top, w, 24, "PLAY"));
+		this.buttonList.add(new GuiButton(2, x, top + 30, half, 24, "MULTIPLAYER"));
+		this.buttonList.add(new GuiButton(15, x + 159, top + 30, half, 24, "REALMS"));
+		this.buttonList.add(new GuiButton(6, x, top + 60, half, 24, "SKINS"));
+		this.buttonList.add(new GuiButton(0, x + 159, top + 60, half, 24, "OPTIONS"));
+		this.buttonList.add(new GuiButton(4, x, top + 90, half, 24, "PROFILE"));
+		this.buttonList.add(new GuiButton(14, x + 159, top + 90, half, 24, "CREDITS"));
+		this.buttonList.add(new GuiButtonLanguage(5, x - 24, top + 124));
 	}
 
 	/**
@@ -435,26 +435,45 @@ public class GuiMainMenu extends GuiScreen {
 		this.renderSkybox(mouseX, mouseY, partialTicks);
 		GlStateManager.enableAlpha();
 
-		drawRect(0, 0, this.width, this.height, 0x42000000);
+		drawRect(0, 0, this.width, this.height, 0x52000000);
 
-		int cardW = 250;
-		int cardH = 214;
+		int cardW = 334;
+		int cardH = 326;
 		int left = this.width / 2 - cardW / 2;
-		int top = this.height / 2 - 112;
-		drawRect(left + 3, top + 3, left + cardW + 3, top + cardH + 3, 0x55000000);
-		drawRect(left, top, left + cardW, top + cardH, 0xEE121417);
+		int top = this.height / 2 - 164;
+
+		drawRect(left + 4, top + 5, left + cardW + 4, top + cardH + 5, 0x66000000);
+		drawRect(left, top, left + cardW, top + cardH, 0xEE101214);
 		drawRect(left, top, left + cardW, top + 2, 0xFF43E06D);
 
 		this.drawCenteredString(this.fontRendererObj, "VAPE V4", this.width / 2, top + 18, 0xFFFFFFFF);
-		this.drawCenteredString(this.fontRendererObj, "EAGLERCRAFT EDITION", this.width / 2, top + 31, 0xFF7E8388);
+		this.drawCenteredString(this.fontRendererObj, "EAGLERCRAFT EDITION", this.width / 2, top + 32, 0xFF858A8F);
+		this.drawCenteredString(this.fontRendererObj, "CLIENT", this.width / 2, top + 48, 0xFF43E06D);
 
-		String version = "Minecraft 1.12.2";
-		this.drawCenteredString(this.fontRendererObj, version, this.width / 2, top + cardH - 22, 0xFF73777B);
-		this.drawCenteredString(this.fontRendererObj, "Vape V4 port by Zero7Wrath", this.width / 2, top + cardH - 10, 0xFF565A5E);
+		drawRect(left + 16, top + 66, left + cardW - 16, top + 67, 0xFF292C2F);
+
+		String[] labels = {"PLAY", "MULTIPLAYER", "REALMS", "SKINS", "OPTIONS", "PROFILE", "CREDITS"};
+		for (GuiButton button : this.buttonList) {
+			if (button.id == 5 || !button.visible) continue;
+			boolean hover = mouseX >= button.xPosition && mouseX <= button.xPosition + button.width
+					&& mouseY >= button.yPosition && mouseY <= button.yPosition + button.height;
+				int bg = hover ? 0xFF292D30 : 0xFF1A1D1F;
+				int accent = hover ? 0xFF43E06D : 0xFF303438;
+				drawRect(button.xPosition, button.yPosition, button.xPosition + button.width,
+						button.yPosition + button.height, bg);
+				drawRect(button.xPosition, button.yPosition, button.xPosition + 2,
+						button.yPosition + button.height, accent);
+				this.drawCenteredString(this.fontRendererObj, button.displayString,
+						button.xPosition + button.width / 2,
+						button.yPosition + (button.height - 8) / 2,
+						hover ? 0xFFBFFFCF : 0xFFE4E4E4);
+		}
+
+		this.drawCenteredString(this.fontRendererObj, "Minecraft 1.12.2", this.width / 2, top + 290, 0xFF777B80);
+		this.drawCenteredString(this.fontRendererObj, "Vape V4 port by Zero7Wrath", this.width / 2, top + 304, 0xFF565A5E);
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
-
 	/**
 	 * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
 	 */
