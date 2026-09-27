@@ -13,6 +13,13 @@ public class Client {
     public static Client INSTANCE;
     public static Manager manager;
     private boolean guiKeyDown;
+    private static int guiKey = KeyboardConstants.KEY_F4;
+    private static boolean bindingGuiKey;
+
+    public static int getGuiKey() { return guiKey; }
+    public static void setGuiKey(int key) { guiKey = key; }
+    public static boolean isBindingGuiKey() { return bindingGuiKey; }
+    public static void setBindingGuiKey(boolean binding) { bindingGuiKey = binding; }
 
     public void init() {
         INSTANCE = this;
@@ -26,7 +33,7 @@ public class Client {
         MacroManager.tick();
 
         Minecraft mc = Minecraft.getMinecraft();
-        boolean down = Keyboard.isKeyDown(KeyboardConstants.KEY_F4);
+        boolean down = Keyboard.isKeyDown(guiKey);
 
         if (down && !guiKeyDown && mc.currentScreen == null) {
             mc.displayGuiScreen(new ClickGuiScreen());
