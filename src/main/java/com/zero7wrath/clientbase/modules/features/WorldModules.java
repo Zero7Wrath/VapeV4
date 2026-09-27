@@ -425,4 +425,34 @@ public final class WorldModules {
         @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.World, 69); }
     }
 
+
+    public static class WorldTimeV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public WorldTimeV2() { super("WorldTimeV2", "World module: WorldTimeV2.", Category.World); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.World, 70); }
+    }
+
+    public static class WeatherCycleV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public WeatherCycleV2() { super("WeatherCycleV2", "World module: WeatherCycleV2.", Category.World); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.World, 71); }
+    }
+
+    public static class VoidCheckV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public VoidCheckV2() { super("VoidCheckV2", "World module: VoidCheckV2.", Category.World); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.World, 72); }
+    }
+
+    public static class FallAssistV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public FallAssistV2() { super("FallAssistV2", "World module: FallAssistV2.", Category.World); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.World, 73); }
+    }
+
+    public static class EnvironmentLockV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public EnvironmentLockV2() { super("EnvironmentLockV2", "World module: EnvironmentLockV2.", Category.World); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.World, 74); }
+    }
 }
