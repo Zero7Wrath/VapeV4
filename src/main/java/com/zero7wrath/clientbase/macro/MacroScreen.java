@@ -41,7 +41,7 @@ public class MacroScreen extends GuiScreen {
             fontRendererObj.drawString("Macro " + (i + 1), left + 12, y + 6, 0xFFC8C8C8);
             drawRect(left + 105, y, left + 135, y + 20,
                     listeningSlot == i ? 0xFF43E06D : 0xFF25272A);
-            String key = MacroManager.getKey(i) < 0 ? "SET" : String.valueOf(MacroManager.getKey(i));
+            String key = MacroManager.getKey(i) < 0 ? "SET" : net.lax1dude.eaglercraft.Keyboard.getKeyName(MacroManager.getKey(i));
             fontRendererObj.drawString(key, left + 112, y + 6,
                     listeningSlot == i ? 0xFF101311 : 0xFFBFC1C3);
             fields[i].drawTextBox();
