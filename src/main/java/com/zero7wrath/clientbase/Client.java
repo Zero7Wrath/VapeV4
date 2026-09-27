@@ -18,9 +18,12 @@ public class Client {
     }
 
     public void onTick() {
+        MacroManager.tick();
+    }
+
+    public void onPostTick() {
         if (manager != null) {
             manager.onTick();
         }
-        MacroManager.tick();
     }
 }
