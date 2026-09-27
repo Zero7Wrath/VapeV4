@@ -165,18 +165,14 @@ public class GuiMainMenu extends GuiScreen {
 		this.field_193978_M = this.fontRendererObj.getStringWidth("Resources copyright Mojang AB");
 		this.field_193979_N = this.width - this.field_193978_M - 2;
 
-		int top = this.height / 2 - 92;
-		int w = 310;
-		int half = 151;
-		int x = this.width / 2 - w / 2;
+		int top = this.height / 4 + 48;
+		int x = this.width / 2 - 100;
 
-		this.buttonList.add(new GuiButton(1, x, top, w, 24, "PLAY"));
-		this.buttonList.add(new GuiButton(2, x, top + 30, half, 24, "MULTIPLAYER"));
-		this.buttonList.add(new GuiButton(15, x + 159, top + 30, half, 24, "REALMS"));
-		this.buttonList.add(new GuiButton(4, x, top + 60, half, 24, "PROFILE"));
-		this.buttonList.add(new GuiButton(16, x + 159, top + 60, half, 24, "ALTS"));
-		this.buttonList.add(new GuiButton(0, x, top + 90, half, 24, "OPTIONS"));
-		this.buttonList.add(new GuiButtonLanguage(5, x - 24, top + 124));
+		this.buttonList.add(new GuiButton(1, x, top, 200, 20, "Singleplayer"));
+		this.buttonList.add(new GuiButton(2, x, top + 24, 200, 20, "Multiplayer"));
+		this.buttonList.add(new GuiButton(0, x, top + 48, 200, 20, "Options"));
+		this.buttonList.add(new GuiButton(14, x, top + 96, 100, 20, "Credits"));
+		this.buttonList.add(new GuiButton(4, x + 104, top + 96, 96, 20, "Edit"));
 	}
 
 	/**
@@ -432,41 +428,25 @@ public class GuiMainMenu extends GuiScreen {
 		this.renderSkybox(mouseX, mouseY, partialTicks);
 		GlStateManager.enableAlpha();
 
-		// Clean Vape V4 overlay: keep the panorama visible and make the controls the focus.
-		drawRect(0, 0, this.width, this.height, 0x46000000);
+		this.mc.getTextureManager().bindTexture(MINECRAFT_TITLE_TEXTURES);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		int logoWidth = 274;
+		int logoHeight = 141;
+		int logoX = this.width / 2 - logoWidth / 2;
+		int logoY = 18;
+		this.drawTexturedModalRect(logoX, logoY, 0, 0, logoWidth, logoHeight);
 
-		int panelW = 360;
-		int panelH = 338;
-		int left = this.width / 2 - panelW / 2;
-		int top = this.height / 2 - panelH / 2;
+		this.mc.getTextureManager().bindTexture(field_194400_H);
+		this.drawTexturedModalRect(this.width / 2 - 60, logoY + 104, 0, 0, 120, 20);
 
-		drawRect(left + 5, top + 6, left + panelW + 5, top + panelH + 6, 0x72000000);
-		drawRect(left, top, left + panelW, top + panelH, 0xF30D0F11);
-		drawRect(left, top, left + panelW, top + 3, 0xFF43E06D);
+		this.drawCenteredString(this.fontRendererObj, this.splashText, this.width / 2 + 90, logoY + 88, 0xFFFFFF00);
 
-		this.drawCenteredString(this.fontRendererObj, "VAPE V4", this.width / 2, top + 20, 0xFFFFFFFF);
-		this.drawCenteredString(this.fontRendererObj, "EAGLERCRAFT EDITION", this.width / 2, top + 36, 0xFF8D9398);
-		this.drawCenteredString(this.fontRendererObj, "1.12.2", this.width / 2, top + 51, 0xFF43E06D);
-		drawRect(left + 20, top + 64, left + panelW - 20, top + 65, 0xFF292D30);
+		String version = "Vape V4 Eaglercraft";
+		this.drawString(this.fontRendererObj, version, 2, this.height - 12, 0xFFFFFFFF);
+		this.drawString(this.fontRendererObj, "Copyright Mojang AB", this.width - this.fontRendererObj.getStringWidth("Copyright Mojang AB") - 2,
+				this.height - 12, 0xFFFFFFFF);
 
-		for (GuiButton button : this.buttonList) {
-			if (button.id == 5 || !button.visible) continue;
-			boolean hover = mouseX >= button.xPosition && mouseX <= button.xPosition + button.width
-					&& mouseY >= button.yPosition && mouseY <= button.yPosition + button.height;
-			int bg = hover ? 0xFF292D30 : 0xFF17191B;
-			int edge = hover ? 0xFF43E06D : 0xFF303438;
-			drawRect(button.xPosition, button.yPosition, button.xPosition + button.width,
-				button.yPosition + button.height, bg);
-			drawRect(button.xPosition, button.yPosition, button.xPosition + 3,
-				button.yPosition + button.height, edge);
-			this.drawCenteredString(this.fontRendererObj, button.displayString,
-				button.xPosition + button.width / 2,
-				button.yPosition + 8,
-				hover ? 0xFFBFFFCF : 0xFFE8E8E8);
-		}
-
-		this.drawCenteredString(this.fontRendererObj, "Vape V4 Client", this.width / 2, top + 294, 0xFF777C81);
-		this.drawCenteredString(this.fontRendererObj, "Zero7Wrath", this.width / 2, top + 309, 0xFF565B60);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
 	/**
