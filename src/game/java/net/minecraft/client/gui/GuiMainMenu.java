@@ -164,29 +164,19 @@ public class GuiMainMenu extends GuiScreen {
 		backgroundTexture2 = this.mc.getTextureManager().getDynamicTextureLocation("background", viewportTexture2);
 		this.field_193978_M = this.fontRendererObj.getStringWidth("Resources copyright Mojang AB");
 		this.field_193979_N = this.width - this.field_193978_M - 2;
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
 
-		if (calendar.get(2) + 1 == 12 && calendar.get(5) == 24) {
-			this.splashText = I18n.format("eaglercraft.splashes.xmas");
-		} else if (calendar.get(2) + 1 == 1 && calendar.get(5) == 1) {
-			this.splashText = I18n.format("eaglercraft.splashes.newyear");
-		} else if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31) {
-			this.splashText = I18n.format("eaglercraft.splashes.halloween");
-		}
+		int top = this.height / 4 + 42;
+		int w = 202;
+		int gap = 4;
+		int x = this.width / 2 - w / 2;
 
-		int i = 24;
-		int j = this.height / 4 + 48;
-
-		if (this.mc.isDemo()) {
-			this.addDemoButtons(j, 24);
-		} else {
-			this.addSingleplayerMultiplayerButtons(j, 24);
-		}
-
-		this.buttonList.add(new GuiButton(0, this.width / 2 - 100, j + 72 + 12, 98, 20, I18n.format("menu.options")));
-		this.buttonList.add(new GuiButton(4, this.width / 2 + 2, j + 72 + 12, 98, 20, I18n.format("Edit Profile")));
-		this.buttonList.add(new GuiButtonLanguage(5, this.width / 2 - 124, j + 72 + 12));
+		this.buttonList.add(new GuiButton(1, x, top, w, 20, "PLAY"));
+		this.buttonList.add(new GuiButton(2, x, top + 24, w, 20, "MULTIPLAYER"));
+		this.buttonList.add(new GuiButton(6, x, top + 48, w, 20, "SKINS"));
+		this.buttonList.add(new GuiButton(0, x, top + 72, w, 20, "OPTIONS"));
+		this.buttonList.add(new GuiButton(4, x, top + 96, 99, 20, "PROFILE"));
+		this.buttonList.add(new GuiButton(14, x + 103, top + 96, 99, 20, "CREDITS"));
+		this.buttonList.add(new GuiButtonLanguage(5, x - 24, top + 120));
 	}
 
 	/**
@@ -223,41 +213,28 @@ public class GuiMainMenu extends GuiScreen {
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if (button.id == 0) {
 			this.mc.displayGuiScreen(new GuiOptions(this, this.mc.gameSettings));
-		}
-
-		if (button.id == 5) {
+		} else if (button.id == 5) {
 			this.mc.displayGuiScreen(new GuiLanguage(this, this.mc.gameSettings, this.mc.getLanguageManager()));
-		}
-
-		if (button.id == 1) {
+		} else if (button.id == 1) {
 			this.mc.displayGuiScreen(new GuiScreenIntegratedServerStartup(this));
-		}
-
-		if (button.id == 2) {
+		} else if (button.id == 2) {
 			this.mc.displayGuiScreen(new GuiMultiplayer(this));
-		}
-
-		if (button.id == 4) {
+		} else if (button.id == 4) {
 			this.mc.displayGuiScreen(new GuiScreenEditProfile(this));
-		}
-
-		if (button.id == 11) {
+		} else if (button.id == 6) {
+			this.mc.displayGuiScreen(new GuiCustomizeSkin(this));
+		} else if (button.id == 14) {
+			this.mc.displayGuiScreen(new GuiCredits(this, "/assets/eagler/credits.txt"));
+		} else if (button.id == 11) {
 			this.mc.launchIntegratedServer("Demo_World", "Demo_World", WorldServerDemo.DEMO_WORLD_SETTINGS);
-		}
-
-		if (button.id == 12) {
+		} else if (button.id == 12) {
 			ISaveFormat isaveformat = this.mc.getSaveLoader();
 			WorldInfo worldinfo = isaveformat.getWorldInfo("Demo_World");
-
 			if (worldinfo != null) {
 				this.mc.displayGuiScreen(new GuiYesNo(this, I18n.format("selectWorld.deleteQuestion"),
 						"'" + worldinfo.getWorldName() + "' " + I18n.format("selectWorld.deleteWarning"),
 						I18n.format("selectWorld.deleteButton"), I18n.format("gui.cancel"), 12));
 			}
-		}
-
-		if (button.id == 14) {
-			this.mc.displayGuiScreen(new GuiCredits(this, "/assets/eagler/credits.txt"));
 		}
 	}
 
@@ -454,49 +431,23 @@ public class GuiMainMenu extends GuiScreen {
 		GlStateManager.disableAlpha();
 		this.renderSkybox(mouseX, mouseY, partialTicks);
 		GlStateManager.enableAlpha();
-		int i = 274;
-		int j = this.width / 2 - 137;
-		int k = 30;
-		this.drawGradientRect(0, 0, this.width, this.height, -2130706433, 16777215);
-		this.drawGradientRect(0, 0, this.width, this.height, 0, Integer.MIN_VALUE);
-		this.mc.getTextureManager().bindTexture(MINECRAFT_TITLE_TEXTURES);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-		if ((double) this.updateCounter < 1.0E-4D) {
-			this.drawTexturedModalRect(j + 0, 30, 0, 0, 99, 44);
-			this.drawTexturedModalRect(j + 99, 30, 129, 0, 27, 44);
-			this.drawTexturedModalRect(j + 99 + 26, 30, 126, 0, 3, 44);
-			this.drawTexturedModalRect(j + 99 + 26 + 3, 30, 99, 0, 26, 44);
-			this.drawTexturedModalRect(j + 155, 30, 0, 45, 155, 44);
-		} else {
-			this.drawTexturedModalRect(j + 0, 30, 0, 0, 155, 44);
-			this.drawTexturedModalRect(j + 155, 30, 0, 45, 155, 44);
-		}
+		drawRect(0, 0, this.width, this.height, 0x42000000);
 
-		this.mc.getTextureManager().bindTexture(field_194400_H);
+		int cardW = 250;
+		int cardH = 214;
+		int left = this.width / 2 - cardW / 2;
+		int top = this.height / 2 - 112;
+		drawRect(left + 3, top + 3, left + cardW + 3, top + cardH + 3, 0x55000000);
+		drawRect(left, top, left + cardW, top + cardH, 0xEE121417);
+		drawRect(left, top, left + cardW, top + 2, 0xFF43E06D);
 
-		drawModalRectWithCustomSizedTexture(j + 88, 67, 0.0F, 0.0F, 98, 14, 128.0F, 16.0F);
+		this.drawCenteredString(this.fontRendererObj, "VAPE V4", this.width / 2, top + 18, 0xFFFFFFFF);
+		this.drawCenteredString(this.fontRendererObj, "EAGLERCRAFT EDITION", this.width / 2, top + 31, 0xFF7E8388);
 
-		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) (this.width / 2 + 90), 70.0F, 0.0F);
-		GlStateManager.rotate(-20.0F, 0.0F, 0.0F, 1.0F);
-		float f = 1.8F - MathHelper.abs(
-				MathHelper.sin((float) (Minecraft.getSystemTime() % 1000L) / 1000.0F * ((float) Math.PI * 2F)) * 0.1F);
-		f = f * 100.0F / (float) (this.fontRendererObj.getStringWidth(this.splashText) + 32);
-		GlStateManager.scale(f, f, f);
-		this.drawCenteredString(this.fontRendererObj, this.splashText, 0, -8, -256);
-		GlStateManager.popMatrix();
-		String s = "Minecraft 1.12.2";
-
-		if (this.mc.isDemo()) {
-			s = s + " Demo";
-		}
-
-		this.drawString(this.fontRendererObj, s, 2, this.height - 20, -1);
-		this.drawString(this.fontRendererObj, "Eaglercraft 1.12.2 (" + EaglercraftVersion.projectOriginVersion + ")", 2,
-				this.height - 10, -1);
-		this.drawString(this.fontRendererObj, "Resources copyright Mojang AB", this.field_193979_N, this.height - 10,
-				-1);
+		String version = "Minecraft 1.12.2";
+		this.drawCenteredString(this.fontRendererObj, version, this.width / 2, top + cardH - 22, 0xFF73777B);
+		this.drawCenteredString(this.fontRendererObj, "Vape V4 port by Zero7Wrath", this.width / 2, top + cardH - 10, 0xFF565A5E);
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
