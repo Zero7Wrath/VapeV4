@@ -15,7 +15,7 @@ public class GuiVapeAlts extends GuiScreen {
     private GuiTextField field;
     private int page = 0;
     private static final int VISIBLE = 7;
-    private int selected = -1;
+    private int selected = 0;
     private String status = "Add as many local offline names as you want.";
 
     private static final String[] A = {
@@ -240,6 +240,6 @@ public class GuiVapeAlts extends GuiScreen {
 
     @Override
     public boolean doesGuiPauseGame() {
-        return true;
+        return false;
     }
 }
