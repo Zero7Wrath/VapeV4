@@ -101,7 +101,7 @@ public final class BulkModuleLogic {
 
     private static void utility(Minecraft mc, int id) {
         switch (id % 10) {
-            case 0: mc.gameSettings.keyBindForward.pressed = true; break;
+            case 0: mc.player.moveForward = 1.0F; break;
             case 1: if (!mc.player.isSneaking() && mc.player.moveForward != 0.0F) mc.player.setSprinting(true); break;
             case 2: if (mc.player.onGround && mc.player.moveForward != 0.0F) mc.player.jump(); break;
             case 3: mc.rightClickDelayTimer = 0; break;
