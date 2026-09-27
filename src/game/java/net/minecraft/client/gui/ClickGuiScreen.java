@@ -206,6 +206,17 @@ public class ClickGuiScreen extends GuiScreen {
         }
     }
 
+    private void adjustSetting(Setting<?> setting) {
+        if (setting instanceof Setting.BooleanSetting) {
+            ((Setting.BooleanSetting)setting).toggle();
+        } else if (setting instanceof Setting.NumberSetting) {
+            Setting.NumberSetting number = (Setting.NumberSetting)setting;
+            number.setValue(number.getValue() + number.getIncrement());
+        } else if (setting instanceof Setting.ModeSetting) {
+            ((Setting.ModeSetting)setting).cycle();
+        }
+    }
+
     private String settingValue(Setting<?> setting) {
         Object value = setting.getValue();
         if (value instanceof Double) {
@@ -300,11 +311,15 @@ public class ClickGuiScreen extends GuiScreen {
             Module module = modules.get(i);
             if (inside(mouseX, mouseY, cx, cy2, cx + CARD_W, cy2 + CARD_H)) {
                 if (mouseButton == 0) {
-                    if (!module.getSettings().isEmpty() && mouseX >= cx + CARD_W - 34) {
+                    if (expanded == module && !module.getSettings().isEmpty() && mouseY >= cy2 + 37) {
+                        adjustSetting(module.getSettings().get(0));
+                        com.zero7wrath.clientbase.config.ConfigManager.save("default");
+                    } else if (!module.getSettings().isEmpty() && mouseX >= cx + CARD_W - 34) {
                         expanded = expanded == module ? null : module;
                         module.open = expanded == module;
                     } else {
                         module.toggle();
+                        com.zero7wrath.clientbase.config.ConfigManager.save("default");
                     }
                 } else if (mouseButton == 1 && !module.getSettings().isEmpty()) {
                     expanded = expanded == module ? null : module;
