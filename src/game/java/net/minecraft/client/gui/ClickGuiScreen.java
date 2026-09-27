@@ -12,17 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClickGuiScreen extends GuiScreen {
-    private static final int SIDEBAR_W = 118;
-    private static final int PANEL_W = 410;
-    private static final int HEADER_H = 42;
-    private static final int CARD_W = 190;
-    private static final int CARD_H = 52;
+    private static final int SIDEBAR_W = 122;
+    private static final int PANEL_W = 454;
+    private static final int HEADER_H = 48;
+    private static final int CARD_W = 210;
+    private static final int CARD_H = 62;
     private static final int CARD_GAP = 8;
 
     private static final int BG = 0xF90E0F11;
     private static final int PANEL = 0xF917181A;
     private static final int CARD = 0xFF1D1F21;
-    private static final int CARD_HOVER = 0xFF25282B;
+    private static final int CARD_HOVER = 0xFF26292C;
     private static final int CARD_ON = 0xFF43E06D;
     private static final int TEXT = 0xFFE8E8E8;
     private static final int DIM = 0xFF92969A;
@@ -50,8 +50,8 @@ public class ClickGuiScreen extends GuiScreen {
     }
 
     private int top() {
-        if (guiY >= 0) return Math.max(4, Math.min(height - 318, guiY));
-        return Math.max(6, height / 2 - 150);
+        if (guiY >= 0) return Math.max(4, Math.min(height - 342, guiY));
+        return Math.max(6, height / 2 - 166);
     }
 
     private boolean inside(int mx, int my, int x1, int y1, int x2, int y2) {
@@ -61,7 +61,7 @@ public class ClickGuiScreen extends GuiScreen {
     @Override
     public void initGui() {
         search = new GuiTextField(91, fontRendererObj,
-                left() + SIDEBAR_W + 145, top() + 11, 170, 20);
+                left() + SIDEBAR_W + 265, top() + 13, 176, 20);
         search.setMaxStringLength(48);
         search.setFocused(false);
     }
@@ -74,14 +74,14 @@ public class ClickGuiScreen extends GuiScreen {
         if (minimized) {
             drawRect(x, y, x + SIDEBAR_W, y + 34, BG);
             fontRendererObj.drawString("VAPE", x + 12, y + 11, TEXT);
-            fontRendererObj.drawString("V4", x + 45, y + 11, CARD_ON);
+            fontRendererObj.drawString("V4", x + 46, y + 11, CARD_ON);
             fontRendererObj.drawString("+", x + SIDEBAR_W - 18, y + 11, DIM);
             super.drawScreen(mouseX, mouseY, partialTicks);
             return;
         }
 
         int totalW = SIDEBAR_W + PANEL_W;
-        int totalH = Math.min(height - 12, 310);
+        int totalH = 342;
 
         drawRect(x + 4, y + 4, x + totalW + 4, y + totalH + 4, 0x66000000);
         drawRect(x, y, x + SIDEBAR_W, y + totalH, BG);
@@ -91,7 +91,6 @@ public class ClickGuiScreen extends GuiScreen {
         fontRendererObj.drawString("VAPE", x + 12, y + 13, TEXT);
         fontRendererObj.drawString("V4", x + 46, y + 13, CARD_ON);
         fontRendererObj.drawString("-", x + SIDEBAR_W - 18, y + 13, DIM);
-        fontRendererObj.drawString("RMB: BIND", x + 67, y + 13, DIM);
 
         drawSidebar(x, y, mouseX, mouseY);
         drawModulePanel(x + SIDEBAR_W, y, totalH, mouseX, mouseY);
@@ -114,30 +113,31 @@ public class ClickGuiScreen extends GuiScreen {
                 drawRect(x + 7, rowY, x + SIDEBAR_W - 7, rowY + 24, 0xFF202225);
             }
 
-            String label = pretty(categories[i]);
-            fontRendererObj.drawString(label, x + 16, rowY + 8, active ? TEXT : DIM);
+            fontRendererObj.drawString(pretty(categories[i]), x + 16, rowY + 8, active ? TEXT : DIM);
         }
 
-        drawRect(x + 9, y + 282, x + SIDEBAR_W - 9, y + 283, LINE);
-        fontRendererObj.drawString("CONFIG", x + 12, y + 291, DIM);
+        drawRect(x + 9, y + 286, x + SIDEBAR_W - 9, y + 287, LINE);
+        fontRendererObj.drawString("CONFIG", x + 12, y + 295, DIM);
 
-        if (inside(mouseX, mouseY, x + 7, y + 298, x + SIDEBAR_W - 7, y + 322))
-            drawRect(x + 7, y + 298, x + SIDEBAR_W - 7, y + 322, CARD_HOVER);
-        fontRendererObj.drawString("Profiles", x + 16, y + 306, TEXT);
+        if (inside(mouseX, mouseY, x + 7, y + 302, x + SIDEBAR_W - 7, y + 326))
+            drawRect(x + 7, y + 302, x + SIDEBAR_W - 7, y + 326, CARD_HOVER);
+        fontRendererObj.drawString("Profiles", x + 16, y + 310, TEXT);
 
-        if (inside(mouseX, mouseY, x + 7, y + 323, x + SIDEBAR_W - 7, y + 347))
-            drawRect(x + 7, y + 323, x + SIDEBAR_W - 7, y + 347, CARD_HOVER);
-        fontRendererObj.drawString("Macros", x + 16, y + 331, TEXT);
+        if (inside(mouseX, mouseY, x + 7, y + 327, x + SIDEBAR_W - 7, y + 351))
+            drawRect(x + 7, y + 327, x + SIDEBAR_W - 7, y + 351, CARD_HOVER);
+        fontRendererObj.drawString("Macros", x + 16, y + 335, TEXT);
     }
 
     private void drawModulePanel(int x, int y, int h, int mouseX, int mouseY) {
         drawRect(x, y, x + PANEL_W, y + HEADER_H, 0xFF151618);
-        fontRendererObj.drawString(pretty(categories[selectedCategory]), x + 14, y + 14, TEXT);
-        fontRendererObj.drawString("MODULES", x + 14, y + 27, DIM);
+
+        String categoryName = pretty(categories[selectedCategory]);
+        fontRendererObj.drawString(categoryName, x + 14, y + 12, TEXT);
+        fontRendererObj.drawString(filteredModules().size() + " modules", x + 14, y + 27, DIM);
 
         search.drawTextBox();
         if (search.getText().length() == 0) {
-            fontRendererObj.drawString("Search", x + 156, y + 18, DIM);
+            fontRendererObj.drawString("Search modules...", x + 276, y + 18, DIM);
         }
 
         List<Module> modules = filteredModules();
@@ -156,7 +156,6 @@ public class ClickGuiScreen extends GuiScreen {
             Module module = modules.get(i);
             int cx = x + 10 + col * (CARD_W + CARD_GAP);
             int cy = startY + row * (CARD_H + CARD_GAP);
-
             if (cy + CARD_H > y + h - 5) break;
 
             boolean hover = inside(mouseX, mouseY, cx, cy, cx + CARD_W, cy + CARD_H);
@@ -165,17 +164,28 @@ public class ClickGuiScreen extends GuiScreen {
             drawRect(cx, cy, cx + CARD_W, cy + CARD_H, on ? CARD_ON : (hover ? CARD_HOVER : CARD));
             drawRect(cx, cy, cx + 3, cy + CARD_H, on ? 0xFF8BFFAA : 0xFF3A3D40);
 
-            fontRendererObj.drawString(module.getName(), cx + 11, cy + 9,
-                    on ? 0xFF101311 : TEXT);
-
+            fontRendererObj.drawString(module.getName(), cx + 11, cy + 8, on ? 0xFF101311 : TEXT);
             String description = module.getDescription();
-            if (description.length() > 27) description = description.substring(0, 27) + "...";
-            fontRendererObj.drawString(description, cx + 11, cy + 25,
-                    on ? 0xFF1A251D : DIM);
+            if (description.length() > 31) description = description.substring(0, 31) + "...";
+            fontRendererObj.drawString(description, cx + 11, cy + 22, on ? 0xFF1A251D : DIM);
+
+            if (expanded == module && !module.getSettings().isEmpty()) {
+                drawRect(cx + 10, cy + 37, cx + CARD_W - 10, cy + 38, on ? 0x55303030 : LINE);
+                int sy = cy + 43;
+                int shown = 0;
+                for (Setting<?> setting : module.getSettings()) {
+                    if (shown++ >= 2) break;
+                    fontRendererObj.drawString(setting.getName() + ": " + settingValue(setting),
+                            cx + 11, sy, on ? 0xFF1A251D : DIM);
+                    sy += 9;
+                }
+            } else if (!module.getSettings().isEmpty()) {
+                fontRendererObj.drawString("Settings  +", cx + 11, cy + 43, on ? 0xFF1A251D : DIM);
+            }
 
             if (!module.getSettings().isEmpty()) {
-                fontRendererObj.drawString(module == expanded ? "-" : "+",
-                        cx + CARD_W - 17, cy + 9, on ? 0xFF101311 : DIM);
+                fontRendererObj.drawString(expanded == module ? "-" : "+",
+                        cx + CARD_W - 16, cy + 8, on ? 0xFF101311 : DIM);
             }
 
             col++;
@@ -196,12 +206,22 @@ public class ClickGuiScreen extends GuiScreen {
         }
     }
 
+    private String settingValue(Setting<?> setting) {
+        Object value = setting.getValue();
+        if (value instanceof Double) {
+            return String.format(java.util.Locale.US, "%.2f", (Double)value);
+        }
+        return String.valueOf(value);
+    }
+
     private List<Module> filteredModules() {
         ArrayList<Module> result = new ArrayList<Module>();
         String query = search == null ? "" : search.getText().trim().toLowerCase();
 
         for (Module module : Client.manager.getModulesByCategory(categories[selectedCategory])) {
-            if (query.length() == 0 || module.getName().toLowerCase().contains(query)) {
+            if (query.length() == 0
+                    || module.getName().toLowerCase().contains(query)
+                    || module.getDescription().toLowerCase().contains(query)) {
                 result.add(module);
             }
         }
@@ -236,12 +256,12 @@ public class ClickGuiScreen extends GuiScreen {
             return;
         }
 
-        if (mouseButton == 0 && inside(mouseX, mouseY, x + 7, y + 298, x + SIDEBAR_W - 7, y + 322)) {
+        if (mouseButton == 0 && inside(mouseX, mouseY, x + 7, y + 302, x + SIDEBAR_W - 7, y + 326)) {
             mc.displayGuiScreen(new ConfigScreen());
             return;
         }
 
-        if (mouseButton == 0 && inside(mouseX, mouseY, x + 7, y + 323, x + SIDEBAR_W - 7, y + 347)) {
+        if (mouseButton == 0 && inside(mouseX, mouseY, x + 7, y + 327, x + SIDEBAR_W - 7, y + 351)) {
             mc.displayGuiScreen(new MacroScreen(this));
             return;
         }
@@ -258,17 +278,15 @@ public class ClickGuiScreen extends GuiScreen {
         }
 
         int panelX = x + SIDEBAR_W;
-        if (mouseButton == 0 && inside(mouseX, mouseY, panelX + 145, y + 8, panelX + 325, y + 33)) {
+        if (mouseButton == 0 && inside(mouseX, mouseY, panelX + 260, y + 8, panelX + PANEL_W - 10, y + 38)) {
             search.mouseClicked(mouseX, mouseY, mouseButton);
             return;
         }
 
         List<Module> modules = filteredModules();
-        int h = Math.min(height - 12, 310);
+        int h = 342;
         int startY = y + HEADER_H + 8;
         int columns = 2;
-        int availableH = h - HEADER_H - 12;
-        int rowsVisible = Math.max(1, availableH / (CARD_H + CARD_GAP));
         int first = scroll * columns;
 
         for (int i = first; i < modules.size(); ++i) {
@@ -277,13 +295,12 @@ public class ClickGuiScreen extends GuiScreen {
             int row = local / columns;
             int cx = panelX + 10 + col * (CARD_W + CARD_GAP);
             int cy2 = startY + row * (CARD_H + CARD_GAP);
-
             if (cy2 + CARD_H > y + h - 5) break;
 
             Module module = modules.get(i);
             if (inside(mouseX, mouseY, cx, cy2, cx + CARD_W, cy2 + CARD_H)) {
                 if (mouseButton == 0) {
-                    if (!module.getSettings().isEmpty() && mouseX >= cx + CARD_W - 32) {
+                    if (!module.getSettings().isEmpty() && mouseX >= cx + CARD_W - 34) {
                         expanded = expanded == module ? null : module;
                         module.open = expanded == module;
                     } else {
@@ -315,7 +332,7 @@ public class ClickGuiScreen extends GuiScreen {
             if (keyCode != KeyboardConstants.KEY_ESCAPE) {
                 Client.setGuiKey(keyCode);
                 Client.setBindingGuiKey(false);
-                ConfigManager.save("default");
+                ConfigScreen.saveDefault();
             } else {
                 Client.setBindingGuiKey(false);
             }
@@ -333,15 +350,11 @@ public class ClickGuiScreen extends GuiScreen {
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
-
         if (minimized) return;
 
         int wheel = net.lax1dude.eaglercraft.Mouse.getEventDWheel();
-        if (wheel > 0) {
-            scroll--;
-        } else if (wheel < 0) {
-            scroll++;
-        }
+        if (wheel > 0) scroll--;
+        else if (wheel < 0) scroll++;
     }
 
     @Override
