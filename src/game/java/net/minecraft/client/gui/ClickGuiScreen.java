@@ -332,7 +332,7 @@ public class ClickGuiScreen extends GuiScreen {
             if (keyCode != KeyboardConstants.KEY_ESCAPE) {
                 Client.setGuiKey(keyCode);
                 Client.setBindingGuiKey(false);
-                ConfigScreen.saveDefault();
+                com.zero7wrath.clientbase.config.ConfigManager.save("default");
             } else {
                 Client.setBindingGuiKey(false);
             }
