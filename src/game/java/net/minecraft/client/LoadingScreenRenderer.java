@@ -122,6 +122,7 @@ public class LoadingScreenRenderer implements IProgressUpdate {
 				GlStateManager.clear(16640);
 
 				Tessellator tessellator = Tessellator.getInstance();
+				WorldRenderer bufferbuilder = tessellator.getBuffer();
 				GlStateManager.enableTexture2D();
 				this.mc.getTextureManager().bindTexture(VAPE_MOJANG_LOADING);
 				int logoSize = Math.min(96, Math.max(64, k / 8));
@@ -135,7 +136,6 @@ public class LoadingScreenRenderer implements IProgressUpdate {
 				tessellator.draw();
 				this.mc.fontRendererObj.drawStringWithShadow("VAPE V4", floatAtCenter(k, "VAPE V4"), Math.max(4.0F, logoY - 16.0F), 0xFFFFFFFF);
 				this.mc.fontRendererObj.drawStringWithShadow("EAGLERCRAFT EDITION", floatAtCenter(k, "EAGLERCRAFT EDITION"), logoY + logoSize + 4.0F, 0xFFAAAAAA);
-				WorldRenderer bufferbuilder = tessellator.getBuffer();
 				this.mc.getTextureManager().bindTexture(Gui.OPTIONS_BACKGROUND);
 				float f = 32.0F;
 				bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
