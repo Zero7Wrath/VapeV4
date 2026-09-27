@@ -22,6 +22,8 @@ import net.minecraft.block.BlockBed;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import com.zero7wrath.clientbase.Client;
+import com.zero7wrath.clientbase.modules.features.Reach;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.MapItemRenderer;
@@ -270,6 +272,10 @@ public class EntityRenderer implements IResourceManagerReloadListener {
 			if (this.mc.world != null) {
 				this.mc.pointedEntity = null;
 				double d0 = (double) this.mc.playerController.getBlockReachDistance();
+				Reach reach = Client.INSTANCE == null ? null : Client.INSTANCE.getManager().getModule(Reach.class);
+				if (reach != null && reach.isEnabled()) {
+					d0 = Math.max(d0, reach.getDistance());
+				}
 				this.mc.objectMouseOver = entity.rayTrace(d0, partialTicks);
 				Vec3d vec3d = entity.getPositionEyes(partialTicks);
 				boolean flag = false;
