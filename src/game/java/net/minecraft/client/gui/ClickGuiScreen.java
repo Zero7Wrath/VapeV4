@@ -3,6 +3,7 @@ package net.minecraft.client.gui;
 import com.zero7wrath.clientbase.Category;
 import com.zero7wrath.clientbase.Client;
 import com.zero7wrath.clientbase.config.ConfigScreen;
+import com.zero7wrath.clientbase.config.ConfigManager;
 import com.zero7wrath.clientbase.modules.Module;
 import com.zero7wrath.clientbase.settings.Setting;
 import net.lax1dude.eaglercraft.KeyboardConstants;
@@ -38,12 +39,19 @@ public class ClickGuiScreen extends GuiScreen {
     private boolean minimized;
     private GuiTextField search;
     private Module expanded;
+    private boolean dragging;
+    private int dragOffsetX;
+    private int dragOffsetY;
+    private int guiX = -1;
+    private int guiY = -1;
 
     private int left() {
+        if (guiX >= 0) return Math.max(4, Math.min(width - SIDEBAR_W - PANEL_W - 4, guiX));
         return Math.max(6, width / 2 - (SIDEBAR_W + PANEL_W) / 2);
     }
 
     private int top() {
+        if (guiY >= 0) return Math.max(4, Math.min(height - 318, guiY));
         return Math.max(6, height / 2 - 150);
     }
 
@@ -84,6 +92,7 @@ public class ClickGuiScreen extends GuiScreen {
         fontRendererObj.drawString("VAPE", x + 12, y + 13, TEXT);
         fontRendererObj.drawString("V4", x + 46, y + 13, CARD_ON);
         fontRendererObj.drawString("-", x + SIDEBAR_W - 18, y + 13, DIM);
+        fontRendererObj.drawString("RMB: BIND", x + 67, y + 13, DIM);
 
         drawSidebar(x, y, mouseX, mouseY);
         drawModulePanel(x + SIDEBAR_W, y, totalH, mouseX, mouseY);
@@ -210,6 +219,19 @@ public class ClickGuiScreen extends GuiScreen {
         int x = left();
         int y = top();
 
+        if (mouseButton == 0 && inside(mouseX, mouseY, x, y, x + SIDEBAR_W, y + 34)
+                && net.lax1dude.eaglercraft.Keyboard.isKeyDown(KeyboardConstants.KEY_LSHIFT)) {
+            dragging = true;
+            dragOffsetX = mouseX - x;
+            dragOffsetY = mouseY - y;
+            return;
+        }
+
+        if (mouseButton == 1 && inside(mouseX, mouseY, x, y, x + SIDEBAR_W, y + 34)) {
+            Client.setBindingGuiKey(true);
+            return;
+        }
+
         if (mouseButton == 0 && inside(mouseX, mouseY, x, y, x + SIDEBAR_W, y + 34)) {
             minimized = !minimized;
             return;
@@ -295,6 +317,17 @@ public class ClickGuiScreen extends GuiScreen {
             return;
         }
 
+        if (Client.isBindingGuiKey()) {
+            if (keyCode != KeyboardConstants.KEY_ESCAPE) {
+                Client.setGuiKey(keyCode);
+                Client.setBindingGuiKey(false);
+                ConfigManager.save("default");
+            } else {
+                Client.setBindingGuiKey(false);
+            }
+            return;
+        }
+
         if (keyCode == KeyboardConstants.KEY_ESCAPE) {
             mc.displayGuiScreen(null);
             return;
@@ -315,6 +348,21 @@ public class ClickGuiScreen extends GuiScreen {
         } else if (wheel < 0) {
             scroll++;
         }
+    }
+
+    @Override
+    public void mouseReleased(int mouseX, int mouseY, int state) {
+        dragging = false;
+        super.mouseReleased(mouseX, mouseY, state);
+    }
+
+    @Override
+    public void updateScreen() {
+        if (dragging) {
+            guiX = mouseX - dragOffsetX;
+            guiY = mouseY - dragOffsetY;
+        }
+        super.updateScreen();
     }
 
     @Override
