@@ -425,4 +425,34 @@ public final class InventoryModules {
         @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Inventory, 69); }
     }
 
+
+    public static class QuickSelectV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public QuickSelectV2() { super("QuickSelectV2", "Inventory module: QuickSelectV2.", Category.Inventory); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Inventory, 70); }
+    }
+
+    public static class HotbarLockV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public HotbarLockV2() { super("HotbarLockV2", "Inventory module: HotbarLockV2.", Category.Inventory); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Inventory, 71); }
+    }
+
+    public static class InventoryFocusV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public InventoryFocusV2() { super("InventoryFocusV2", "Inventory module: InventoryFocusV2.", Category.Inventory); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Inventory, 72); }
+    }
+
+    public static class SlotMemoryV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public SlotMemoryV2() { super("SlotMemoryV2", "Inventory module: SlotMemoryV2.", Category.Inventory); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Inventory, 73); }
+    }
+
+    public static class ItemCycleV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public ItemCycleV2() { super("ItemCycleV2", "Inventory module: ItemCycleV2.", Category.Inventory); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Inventory, 74); }
+    }
 }
