@@ -82,10 +82,10 @@ public final class CommandManager {
         String key = raw.toLowerCase();
         if ("none".equals(key) || "off".equals(key)) return -1;
         if (key.length() == 1) {
-            char c = Character.toUpperCase(key.charAt(0));
-            for (int i = 2; i <= 57; i++) {
-                if (Keyboard.getKeyName(i) != null && Keyboard.getKeyName(i).equalsIgnoreCase(String.valueOf(c))) return i;
-            }
+            String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            int[] codes = {30,48,46,32,18,33,34,35,23,36,37,38,50,49,24,25,16,19,31,20,22,47,17,45,21,44,2,3,4,5,6,7,8,9,10,11};
+            int index = letters.indexOf(Character.toUpperCase(key.charAt(0)));
+            if (index >= 0) return codes[index];
         }
         try {
             return Integer.parseInt(key);
