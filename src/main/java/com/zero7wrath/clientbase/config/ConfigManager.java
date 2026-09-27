@@ -40,6 +40,7 @@ public final class ConfigManager {
         PrintWriter out = null;
         try {
             out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+            out.println("guiKey|" + Client.getGuiKey());
             for (Module module : Client.manager.getModules()) {
                 out.println("module|" + module.getName() + "|" + module.isEnabled());
                 for (Setting<?> setting : module.getSettings()) {
@@ -65,6 +66,11 @@ public final class ConfigManager {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\\|", 4);
                 if (parts.length < 3) continue;
+
+                if ("guiKey".equals(parts[0])) {
+                    try { Client.setGuiKey(Integer.parseInt(parts[1])); } catch (NumberFormatException ignored) {}
+                    continue;
+                }
 
                 Module module = Client.manager.getModuleByName(parts[1]);
                 if (module == null) continue;
