@@ -140,6 +140,38 @@ public class GuiVapeAlts extends GuiScreen {
             }
         }
 
+        int by = height - 42;
+        if (inside(mouseX, mouseY, left + 12, by, left + 60, by + 22)) {
+            syncField();
+            if (selected >= 0 && selected < names.size() && !names.get(selected).isEmpty()) {
+                Minecraft.getMinecraft().getSession().setUsername(names.get(selected));
+                status = "Using ALT " + (selected + 1) + " locally.";
+            }
+            return;
+        }
+        if (inside(mouseX, mouseY, left + 66, by, left + 122, by + 22)) {
+            syncField();
+            if (selected >= 0 && selected < names.size()) {
+                names.set(selected, "");
+                buildField();
+                status = "Cleared ALT " + (selected + 1) + ".";
+            }
+            return;
+        }
+        if (inside(mouseX, mouseY, left + 128, by, left + 190, by + 22)) {
+            randomizeSelected();
+            return;
+        }
+        if (inside(mouseX, mouseY, left + 196, by, right - 80, by + 22)) {
+            addSlot();
+            return;
+        }
+        if (inside(mouseX, mouseY, right - 74, by, right - 12, by + 22)) {
+            syncField();
+            Minecraft.getMinecraft().displayGuiScreen(parent);
+            return;
+        }
+
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
