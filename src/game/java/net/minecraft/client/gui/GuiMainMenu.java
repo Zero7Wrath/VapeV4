@@ -432,42 +432,43 @@ public class GuiMainMenu extends GuiScreen {
 		this.renderSkybox(mouseX, mouseY, partialTicks);
 		GlStateManager.enableAlpha();
 
-		drawRect(0, 0, this.width, this.height, 0x52000000);
+		// Clean Vape V4 overlay: keep the panorama visible and make the controls the focus.
+		drawRect(0, 0, this.width, this.height, 0x46000000);
 
-		int cardW = 334;
-		int cardH = 326;
-		int left = this.width / 2 - cardW / 2;
-		int top = this.height / 2 - 164;
+		int panelW = 360;
+		int panelH = 338;
+		int left = this.width / 2 - panelW / 2;
+		int top = this.height / 2 - panelH / 2;
 
-		drawRect(left + 4, top + 5, left + cardW + 4, top + cardH + 5, 0x66000000);
-		drawRect(left, top, left + cardW, top + cardH, 0xEE101214);
-		drawRect(left, top, left + cardW, top + 2, 0xFF43E06D);
+		drawRect(left + 5, top + 6, left + panelW + 5, top + panelH + 6, 0x72000000);
+		drawRect(left, top, left + panelW, top + panelH, 0xF30D0F11);
+		drawRect(left, top, left + panelW, top + 3, 0xFF43E06D);
 
-		this.drawCenteredString(this.fontRendererObj, "VAPE V4", this.width / 2, top + 18, 0xFFFFFFFF);
-		this.drawCenteredString(this.fontRendererObj, "EAGLERCRAFT EDITION", this.width / 2, top + 32, 0xFF858A8F);
-		this.drawCenteredString(this.fontRendererObj, "CLIENT", this.width / 2, top + 48, 0xFF43E06D);
-
-		drawRect(left + 16, top + 66, left + cardW - 16, top + 67, 0xFF292C2F);
+		this.drawCenteredString(this.fontRendererObj, "VAPE V4", this.width / 2, top + 20, 0xFFFFFFFF);
+		this.drawCenteredString(this.fontRendererObj, "EAGLERCRAFT EDITION", this.width / 2, top + 36, 0xFF8D9398);
+		this.drawCenteredString(this.fontRendererObj, "1.12.2", this.width / 2, top + 51, 0xFF43E06D);
+		drawRect(left + 20, top + 64, left + panelW - 20, top + 65, 0xFF292D30);
 
 		for (GuiButton button : this.buttonList) {
 			if (button.id == 5 || !button.visible) continue;
 			boolean hover = mouseX >= button.xPosition && mouseX <= button.xPosition + button.width
 					&& mouseY >= button.yPosition && mouseY <= button.yPosition + button.height;
-				int bg = hover ? 0xFF292D30 : 0xFF1A1D1F;
-				int accent = hover ? 0xFF43E06D : 0xFF303438;
-				drawRect(button.xPosition, button.yPosition, button.xPosition + button.width,
-						button.yPosition + button.height, bg);
-				drawRect(button.xPosition, button.yPosition, button.xPosition + 2,
-						button.yPosition + button.height, accent);
-				this.drawCenteredString(this.fontRendererObj, button.displayString,
-						button.xPosition + button.width / 2,
-						button.yPosition + (button.height - 8) / 2,
-						hover ? 0xFFBFFFCF : 0xFFE4E4E4);
+			int bg = hover ? 0xFF292D30 : 0xFF17191B;
+			int edge = hover ? 0xFF43E06D : 0xFF303438;
+			drawRect(button.xPosition, button.yPosition, button.xPosition + button.width,
+				button.yPosition + button.height, bg);
+			drawRect(button.xPosition, button.yPosition, button.xPosition + 3,
+				button.yPosition + button.height, edge);
+			this.drawCenteredString(this.fontRendererObj, button.displayString,
+				button.xPosition + button.width / 2,
+				button.yPosition + 8,
+				hover ? 0xFFBFFFCF : 0xFFE8E8E8);
 		}
 
-		this.drawCenteredString(this.fontRendererObj, "Minecraft 1.12.2", this.width / 2, top + 290, 0xFF777B80);
-		this.drawCenteredString(this.fontRendererObj, "Vape V4 port by Zero7Wrath", this.width / 2, top + 304, 0xFF565A5E);
+		this.drawCenteredString(this.fontRendererObj, "Vape V4 Client", this.width / 2, top + 294, 0xFF777C81);
+		this.drawCenteredString(this.fontRendererObj, "Zero7Wrath", this.width / 2, top + 309, 0xFF565B60);
 	}
+
 	/**
 	 * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
 	 */
