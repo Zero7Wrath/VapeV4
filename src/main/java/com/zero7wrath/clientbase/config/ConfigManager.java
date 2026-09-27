@@ -3,6 +3,7 @@ package com.zero7wrath.clientbase.config;
 import com.zero7wrath.clientbase.Client;
 import com.zero7wrath.clientbase.modules.Module;
 import com.zero7wrath.clientbase.settings.Setting;
+import com.zero7wrath.clientbase.gui.GuiTheme;
 import net.peyton.eagler.fs.FileUtils;
 
 import java.io.*;
@@ -41,8 +42,9 @@ public final class ConfigManager {
         try {
             out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
             out.println("guiKey|" + Client.getGuiKey());
+            out.println("guiTheme|" + GuiTheme.getMode() + "|" + GuiTheme.getSpeed());
             for (Module module : Client.manager.getModules()) {
-                out.println("module|" + module.getName() + "|" + module.isEnabled());
+                out.println("module|" + module.getName() + "|" + module.isEnabled() + "|" + module.getKeyBind());
                 for (Setting<?> setting : module.getSettings()) {
                     Object value = setting.getValue();
                     out.println("setting|" + module.getName() + "|" + setting.getName() + "|" + String.valueOf(value));
@@ -72,11 +74,18 @@ public final class ConfigManager {
                     continue;
                 }
 
+                if ("guiTheme".equals(parts[0])) {
+                    GuiTheme.setMode(parts[1]);
+                    if (parts.length >= 3) try { GuiTheme.setSpeed(Float.parseFloat(parts[2])); } catch (NumberFormatException ignored) {}
+                    continue;
+                }
+
                 Module module = Client.manager.getModuleByName(parts[1]);
                 if (module == null) continue;
 
                 if ("module".equals(parts[0]) && parts.length >= 3) {
                     module.setEnabled(Boolean.parseBoolean(parts[2]));
+                    if (parts.length >= 4) try { module.setKeyBind(Integer.parseInt(parts[3])); } catch (NumberFormatException ignored) {}
                 } else if ("setting".equals(parts[0]) && parts.length >= 4) {
                     applySetting(module, parts[2], parts[3]);
                 }
