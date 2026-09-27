@@ -44,7 +44,7 @@ public final class MacroManager {
 
     public static void tick() {
         Minecraft mc = Minecraft.getMinecraft();
-        if (mc == null || mc.player == null) return;
+        if (mc == null || mc.player == null || mc.currentScreen != null) return;
 
         for (int i = 0; i < MAX_MACROS; ++i) {
             int key = keys[i];
