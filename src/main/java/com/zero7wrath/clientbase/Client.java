@@ -1,7 +1,7 @@
 package com.zero7wrath.clientbase;
 
 import com.zero7wrath.clientbase.modules.Manager;
-import com.zero7wrath.clientbase.config.ConfigManager;
+import com.zero7wrath.clientbase.config.ConfigManager;\nimport com.zero7wrath.clientbase.macro.MacroManager;
 
 public class Client {
 
