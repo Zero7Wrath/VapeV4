@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 		<meta name="description" content="Eaglercraft 1.12 WASM-GC test directory HTML page" />
 		<meta name="keywords" content="eaglercraftminecraft, 1.12, 1.12.2" />
-		<title>Eaglercraft 1.12 WASM-GC</title>
+		<title>Vape V4 - Eaglercraft 1.12.2</title>
 		<meta property="og:locale" content="en-US" />
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content="Eaglercraft 1.12 WASM-GC" />
@@ -22,10 +22,22 @@
 					const splash = document.createElement("div");
 					splash.style.width = "100%";
 					splash.style.height = "100%";
+					splash.style.position = "relative";
 					splash.style.imageRendering = "pixelated";
 					splash.style.background = "center / contain no-repeat url(splash.png), 0px 0px / 1000000% 1000000% no-repeat url(splash.png) white";
+					const splashTitle = document.createElement("div");
+					splashTitle.textContent = "VAPE V4";
+					splashTitle.style.position = "absolute";
+					splashTitle.style.top = "6%";
+					splashTitle.style.left = "0";
+					splashTitle.style.width = "100%";
+					splashTitle.style.textAlign = "center";
+					splashTitle.style.font = "bold 32px Arial, sans-serif";
+					splashTitle.style.letterSpacing = "4px";
+					splashTitle.style.color = "#ffffff";
+					splashTitle.style.textShadow = "0 2px 8px #000000";
+					splash.appendChild(splashTitle);
 					document.body.appendChild(splash);
-				
 					console.log("Downloading assets.epk...");
 					var assetsEPK;
 					try {
@@ -87,7 +99,7 @@
 							case 0:
 								return "splash.png";
 							case 1:
-								return "pressAnyKey.png";
+								return "splash.png";
 							case 2:
 								return "crashLogo.png";
 							case 3:
