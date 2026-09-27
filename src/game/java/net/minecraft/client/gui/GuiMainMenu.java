@@ -470,9 +470,6 @@ public class GuiMainMenu extends GuiScreen {
 
 		this.drawCenteredString(this.fontRendererObj, "Minecraft 1.12.2", this.width / 2, top + 290, 0xFF777B80);
 		this.drawCenteredString(this.fontRendererObj, "Vape V4 port by Zero7Wrath", this.width / 2, top + 304, 0xFF565A5E);
-
-		this.drawCenteredString(this.fontRendererObj, "Minecraft 1.12.2", this.width / 2, top + 290, 0xFF777B80);
-		this.drawCenteredString(this.fontRendererObj, "Vape V4 port by Zero7Wrath", this.width / 2, top + 304, 0xFF565A5E);
 	}
 	/**
 	 * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
