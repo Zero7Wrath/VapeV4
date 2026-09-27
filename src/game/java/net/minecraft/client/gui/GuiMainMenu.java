@@ -171,7 +171,8 @@ public class GuiMainMenu extends GuiScreen {
 		int x = this.width / 2 - w / 2;
 
 		this.buttonList.add(new GuiButton(1, x, top, w, 20, "PLAY"));
-		this.buttonList.add(new GuiButton(2, x, top + 24, w, 20, "MULTIPLAYER"));
+		this.buttonList.add(new GuiButton(2, x, top + 24, 99, 20, "MULTIPLAYER"));
+		this.buttonList.add(new GuiButton(15, x + 103, top + 24, 99, 20, "REALMS"));
 		this.buttonList.add(new GuiButton(6, x, top + 48, w, 20, "SKINS"));
 		this.buttonList.add(new GuiButton(0, x, top + 72, w, 20, "OPTIONS"));
 		this.buttonList.add(new GuiButton(4, x, top + 96, 99, 20, "PROFILE"));
@@ -219,6 +220,8 @@ public class GuiMainMenu extends GuiScreen {
 			this.mc.displayGuiScreen(new GuiScreenIntegratedServerStartup(this));
 		} else if (button.id == 2) {
 			this.mc.displayGuiScreen(new GuiMultiplayer(this));
+		} else if (button.id == 15) {
+			this.mc.displayGuiScreen(new GuiVapeRealms(this));
 		} else if (button.id == 4) {
 			this.mc.displayGuiScreen(new GuiScreenEditProfile(this));
 		} else if (button.id == 6) {
