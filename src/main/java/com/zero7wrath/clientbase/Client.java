@@ -2,7 +2,6 @@ package com.zero7wrath.clientbase;
 
 import com.zero7wrath.clientbase.modules.Manager;
 import com.zero7wrath.clientbase.config.ConfigManager;
-import com.zero7wrath.clientbase.macro.MacroManager;
 import net.lax1dude.eaglercraft.Keyboard;
 import net.lax1dude.eaglercraft.KeyboardConstants;
 import net.minecraft.client.Minecraft;
@@ -30,8 +29,6 @@ public class Client {
     }
 
     public void onTick() {
-        MacroManager.tick();
-
         Minecraft mc = Minecraft.getMinecraft();
         boolean down = Keyboard.isKeyDown(guiKey);
 
