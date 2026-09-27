@@ -425,4 +425,34 @@ public final class UtilityModules {
         @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Utility, 69); }
     }
 
+
+    public static class AutoMineV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public AutoMineV2() { super("AutoMineV2", "Utility module: AutoMineV2.", Category.Utility); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Utility, 70); }
+    }
+
+    public static class AutoPlaceV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public AutoPlaceV2() { super("AutoPlaceV2", "Utility module: AutoPlaceV2.", Category.Utility); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Utility, 71); }
+    }
+
+    public static class AutoToolSelectV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public AutoToolSelectV2() { super("AutoToolSelectV2", "Utility module: AutoToolSelectV2.", Category.Utility); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Utility, 72); }
+    }
+
+    public static class InputFixV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public InputFixV2() { super("InputFixV2", "Utility module: InputFixV2.", Category.Utility); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Utility, 73); }
+    }
+
+    public static class ActionDelayV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public ActionDelayV2() { super("ActionDelayV2", "Utility module: ActionDelayV2.", Category.Utility); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Utility, 74); }
+    }
 }
