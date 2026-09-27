@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 public class Sprint extends Module {
 
     public Sprint() {
-        super("Sprint", "Automatically sprints while moving forward.", Category.Movement);
+        super("Sprint", "Automatically sprints while moving forward.", Category.Legit);
     }
 
     @Override
