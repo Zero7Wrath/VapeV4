@@ -44,7 +44,6 @@ import com.zero7wrath.clientbase.modules.features.Reach;
 import com.zero7wrath.clientbase.modules.features.NoWeather;
 import com.zero7wrath.clientbase.modules.features.AutoRespawn;
 import com.zero7wrath.clientbase.modules.features.AirJump;
-import com.zero7wrath.clientbase.modules.features.NoPush;
 import com.zero7wrath.clientbase.modules.features.NoHurtCam;
 import net.lax1dude.eaglercraft.Keyboard;
 import java.util.ArrayList;
@@ -71,7 +70,7 @@ public class Manager {
         register(new NoClickDelay()); register(new FastPlace()); register(new AutoTool());
         register(new Parkour()); register(new SafeWalk());
         register(new NoWeather()); register(new AutoRespawn()); register(new AirJump());
-        register(new NoPush()); register(new NoHurtCam());
+        register(new NoHurtCam());
         registerUniversal(Category.Blatant, new String[]{"Timer"});
         
         registerUniversal(Category.Legit, new String[]{"Atmosphere","Breadcrumbs","Cape","ChinaHat","Clock","Disguise","FOV","FPS","Keystrokes","Memory","Ping","SongBeats","Speedmeter","TimeChanger"});
