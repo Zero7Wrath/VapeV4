@@ -23,8 +23,8 @@ public class AutoTool extends Module {
         float bestSpeed = 1.0F;
         for (int slot = 0; slot < 9; slot++) {
             ItemStack stack = mc.player.inventory.getStackInSlot(slot);
-            if (stack.isEmpty()) continue;
-            float speed = stack.getStrVsBlock(block);
+            if (stack.func_190926_b()) continue;
+            float speed = stack.getStrVsBlock(mc.world.getBlockState(pos));
             if (speed > bestSpeed) { bestSpeed = speed; bestSlot = slot; }
         }
         mc.player.inventory.currentItem = bestSlot;
