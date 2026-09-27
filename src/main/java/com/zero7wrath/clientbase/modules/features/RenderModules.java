@@ -425,4 +425,34 @@ public final class RenderModules {
         @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Render, 69); }
     }
 
+
+    public static class OverlayV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public OverlayV2() { super("OverlayV2", "Render module: OverlayV2.", Category.Render); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Render, 70); }
+    }
+
+    public static class CameraZoomV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public CameraZoomV2() { super("CameraZoomV2", "Render module: CameraZoomV2.", Category.Render); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Render, 71); }
+    }
+
+    public static class ViewDistanceV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public ViewDistanceV2() { super("ViewDistanceV2", "Render module: ViewDistanceV2.", Category.Render); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Render, 72); }
+    }
+
+    public static class EntityGlowV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public EntityGlowV2() { super("EntityGlowV2", "Render module: EntityGlowV2.", Category.Render); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Render, 73); }
+    }
+
+    public static class HudScaleV2 extends Module {
+        private final Minecraft mc = Minecraft.getMinecraft();
+        public HudScaleV2() { super("HudScaleV2", "Render module: HudScaleV2.", Category.Render); }
+        @Override public void onUpdate() { BulkModuleLogic.tick(mc, Category.Render, 74); }
+    }
 }
