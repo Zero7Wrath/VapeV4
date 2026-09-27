@@ -222,67 +222,11 @@ async function initializeContext() {
 		}
 	};
 	
-	if(isLikelyMobileBrowser || !navigator.userActivation || !navigator.userActivation.hasBeenActive) {
-		const pressAnyKeyImage = /** @type {HTMLElement} */ (document.createElement("div"));
-		pressAnyKeyImage.classList.add("_eaglercraftX_press_any_key_image");
-		pressAnyKeyImage.style.position = "absolute";
-		pressAnyKeyImage.style.top = "0px";
-		pressAnyKeyImage.style.left = "0px";
-		pressAnyKeyImage.style.right = "0px";
-		pressAnyKeyImage.style.bottom = "0px";
-		pressAnyKeyImage.style.width = "100%";
-		pressAnyKeyImage.style.height = "100%";
-		pressAnyKeyImage.style.zIndex = "3";
-		pressAnyKeyImage.style.touchAction = "pan-x pan-y";
-		pressAnyKeyImage.style.background = "center / contain no-repeat url(\"" + pressAnyKeyURL + "\"), left / 1000000% 100% no-repeat url(\"" + pressAnyKeyURL + "\") white";
-		pressAnyKeyImage.style.setProperty("image-rendering", "pixelated");
-		parentElement.appendChild(pressAnyKeyImage);
-	
-		await new Promise(function(resolve, reject) {
-			var resolved = false;
-			var mobilePressAnyKeyScreen;
-			var createAudioContextHandler = function() {
-				if(!resolved) {
-					resolved = true;
-					if(isLikelyMobileBrowser) {
-						parentElement.removeChild(mobilePressAnyKeyScreen);
-					}else {
-						window.removeEventListener("keydown", /** @type {function(Event)} */ (createAudioContextHandler));
-						parentElement.removeEventListener("mousedown", /** @type {function(Event)} */ (createAudioContextHandler));
-						parentElement.removeEventListener("touchstart", /** @type {function(Event)} */ (createAudioContextHandler));
-					}
-					try {
-						createAudioContext();
-					}catch(ex) {
-						reject(ex);
-						return;
-					}
-					resolve();
-				}
-			};
-			if(isLikelyMobileBrowser) {
-				mobilePressAnyKeyScreen = /** @type {HTMLElement} */ (document.createElement("div"));
-				mobilePressAnyKeyScreen.classList.add("_eaglercraftX_mobile_press_any_key");
-				mobilePressAnyKeyScreen.setAttribute("style", "position:absolute;background-color:white;font-family:sans-serif;top:10%;left:10%;right:10%;bottom:10%;border:5px double black;padding:calc(5px + 7vh) 15px;text-align:center;font-size:20px;user-select:none;z-index:10;");
-				mobilePressAnyKeyScreen.innerHTML = "<h3 style=\"margin-block-start:0px;margin-block-end:0px;margin:20px 5px;\">Mobile Browser Detected</h3>"
-						+ "<p style=\"margin-block-start:0px;margin-block-end:0px;margin:20px 5px;\">Warning: EaglercraftX WASM-GC requires a lot of memory and may not be stable on most mobile devices!</p>"
-						+ "<p style=\"margin-block-start:0px;margin-block-end:0px;margin:20px 2px;\"><button style=\"font: 24px sans-serif;font-weight:bold;\" class=\"_eaglercraftX_mobile_launch_client\">Launch EaglercraftX</button></p>"
-						/*+ (allowBootMenu ? "<p style=\"margin-block-start:0px;margin-block-end:0px;margin:20px 2px;\"><button style=\"font: 24px sans-serif;\" class=\"_eaglercraftX_mobile_enter_boot_menu\">Enter Boot Menu</button></p>" : "")*/
-						+ "<p style=\"margin-block-start:0px;margin-block-end:0px;margin:25px 5px;\">(Tablets and phones with large screens work best)</p>";
-				mobilePressAnyKeyScreen.querySelector("._eaglercraftX_mobile_launch_client").addEventListener("click", /** @type {function(Event)} */ (createAudioContextHandler));
-				parentElement.appendChild(mobilePressAnyKeyScreen);
-			}else {
-				window.addEventListener("keydown", /** @type {function(Event)} */ (createAudioContextHandler));
-				parentElement.addEventListener("mousedown", /** @type {function(Event)} */ (createAudioContextHandler));
-				parentElement.addEventListener("touchstart", /** @type {function(Event)} */ (createAudioContextHandler));
-			}
-		});
-		
-		parentElement.removeChild(pressAnyKeyImage);
-	}else {
-		createAudioContext();
-	}
-	
+	// Start directly into the client instead of showing the Eaglercraft
+	// "press any key" overlay. Audio is initialized when the browser allows it;
+	// gameplay does not wait for a user click/key press.
+	createAudioContext();
+
 	if(audioCtx) {
 		setCurrentAudioContext(audioCtx, eagruntimeImpl.platformAudio);
 	}else {
