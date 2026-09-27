@@ -3,7 +3,6 @@ package net.minecraft.client.gui;
 import com.zero7wrath.clientbase.Category;
 import com.zero7wrath.clientbase.Client;
 import com.zero7wrath.clientbase.config.ConfigScreen;
-import com.zero7wrath.clientbase.config.ConfigManager;
 import com.zero7wrath.clientbase.modules.Module;
 import com.zero7wrath.clientbase.settings.Setting;
 import net.lax1dude.eaglercraft.KeyboardConstants;
@@ -224,11 +223,6 @@ public class ClickGuiScreen extends GuiScreen {
             dragging = true;
             dragOffsetX = mouseX - x;
             dragOffsetY = mouseY - y;
-            return;
-        }
-
-        if (mouseButton == 1 && inside(mouseX, mouseY, x, y, x + SIDEBAR_W, y + 34)) {
-            Client.setBindingGuiKey(true);
             return;
         }
 
