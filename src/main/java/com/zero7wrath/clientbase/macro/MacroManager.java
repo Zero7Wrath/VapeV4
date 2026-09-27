@@ -1,60 +1,93 @@
 package com.zero7wrath.clientbase.macro;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.lax1dude.eaglercraft.Keyboard;
 import net.minecraft.client.Minecraft;
+import com.zero7wrath.clientbase.Client;
+import com.zero7wrath.clientbase.modules.Module;
 
 public final class MacroManager {
-    public static final int MAX_MACROS = 8;
-    private static final int[] keys = new int[MAX_MACROS];
-    private static final String[] commands = new String[MAX_MACROS];
-    private static final boolean[] wasDown = new boolean[MAX_MACROS];
+    public static final class Macro {
+        public int key = -1;
+        public String module = "";
 
-    static {
-        for (int i = 0; i < MAX_MACROS; ++i) {
-            keys[i] = -1;
-            commands[i] = "";
+        public Macro() {}
+        public Macro(int key, String module) {
+            this.key = key;
+            this.module = module == null ? "" : module;
         }
     }
 
-    private MacroManager() {
+    private static final List<Macro> macros = new ArrayList<Macro>();
+    private static final List<Boolean> wasDown = new ArrayList<Boolean>();
+
+    static {
+        add();
+        add();
+        add();
+        add();
+        add();
+        add();
+        add();
+        add();
+    }
+
+    private MacroManager() {}
+
+    public static int size() {
+        return macros.size();
+    }
+
+    public static void add() {
+        macros.add(new Macro());
+        wasDown.add(Boolean.FALSE);
     }
 
     public static int getKey(int slot) {
-        return keys[slot];
+        return valid(slot) ? macros.get(slot).key : -1;
     }
 
-    public static String getCommand(int slot) {
-        return commands[slot];
+    public static String getModule(int slot) {
+        return valid(slot) ? macros.get(slot).module : "";
     }
 
     public static void setKey(int slot, int key) {
-        if (slot >= 0 && slot < MAX_MACROS) keys[slot] = key;
+        if (valid(slot)) macros.get(slot).key = key;
     }
 
-    public static void setCommand(int slot, String command) {
-        if (slot >= 0 && slot < MAX_MACROS) commands[slot] = command == null ? "" : command.trim();
+    public static void setModule(int slot, String module) {
+        if (valid(slot)) macros.get(slot).module = module == null ? "" : module.trim();
     }
 
     public static void clear(int slot) {
-        if (slot < 0 || slot >= MAX_MACROS) return;
-        keys[slot] = -1;
-        commands[slot] = "";
-        wasDown[slot] = false;
+        if (!valid(slot)) return;
+        macros.get(slot).key = -1;
+        macros.get(slot).module = "";
+        wasDown.set(slot, Boolean.FALSE);
     }
 
     public static void tick() {
         Minecraft mc = Minecraft.getMinecraft();
         if (mc == null || mc.player == null || mc.currentScreen != null) return;
 
-        for (int i = 0; i < MAX_MACROS; ++i) {
-            int key = keys[i];
-            if (key < 0) continue;
+        for (int i = 0; i < macros.size(); ++i) {
+            Macro macro = macros.get(i);
+            if (macro.key < 0) continue;
 
-            boolean down = Keyboard.isKeyDown(key);
-            if (down && !wasDown[i] && commands[i].length() > 0) {
-                mc.player.sendChatMessage(commands[i]);
+            boolean down = Keyboard.isKeyDown(macro.key);
+            boolean previous = wasDown.get(i).booleanValue();
+
+            if (down && !previous && macro.module.length() > 0 && Client.INSTANCE != null) {
+                Module module = Client.INSTANCE.getManager().getModuleByName(macro.module);
+                if (module != null) module.toggle();
             }
-            wasDown[i] = down;
+            wasDown.set(i, Boolean.valueOf(down));
         }
+    }
+
+    private static boolean valid(int slot) {
+        return slot >= 0 && slot < macros.size();
     }
 }
