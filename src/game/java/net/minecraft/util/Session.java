@@ -24,6 +24,11 @@ public class Session {
 		return this.profile == null ? EaglerProfile.getName() : this.profile.getName();
 	}
 
+	public void setUsername(String username) {
+		if (username == null || username.trim().isEmpty()) return;
+		update(username.trim(), offlineUUID);
+	}
+
 	public void reset() {
 		update(EaglerProfile.getName(), offlineUUID);
 	}
