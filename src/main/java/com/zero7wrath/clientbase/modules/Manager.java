@@ -43,7 +43,6 @@ import com.zero7wrath.clientbase.modules.features.Reach;
 import com.zero7wrath.clientbase.modules.features.NoWeather;
 import com.zero7wrath.clientbase.modules.features.AutoRespawn;
 import com.zero7wrath.clientbase.modules.features.AirJump;
-import com.zero7wrath.clientbase.modules.features.NoHurtCam;
 import net.lax1dude.eaglercraft.Keyboard;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +68,6 @@ public class Manager {
         register(new NoClickDelay()); register(new FastPlace()); register(new AutoTool());
         register(new Parkour()); register(new SafeWalk());
         register(new NoWeather()); register(new AutoRespawn()); register(new AirJump());
-        register(new NoHurtCam());
     }
 
     public void register(Module module) {
