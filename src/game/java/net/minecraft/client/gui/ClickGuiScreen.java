@@ -3,6 +3,7 @@ package net.minecraft.client.gui;
 import com.zero7wrath.clientbase.Category;
 import com.zero7wrath.clientbase.Client;
 import com.zero7wrath.clientbase.config.ConfigScreen;
+import com.zero7wrath.clientbase.gui.GuiTheme;
 import com.zero7wrath.clientbase.modules.Module;
 import com.zero7wrath.clientbase.settings.Setting;
 import net.lax1dude.eaglercraft.KeyboardConstants;
@@ -38,6 +39,7 @@ public class ClickGuiScreen extends GuiScreen {
     private boolean minimized;
     private GuiTextField search;
     private Module expanded;
+    private Module bindingModule;
     private boolean dragging;
     private int dragOffsetX;
     private int dragOffsetY;
@@ -89,7 +91,7 @@ public class ClickGuiScreen extends GuiScreen {
 
         drawRect(x, y, x + SIDEBAR_W, y + 42, 0xFF111214);
         fontRendererObj.drawString("VAPE", x + 12, y + 13, TEXT);
-        fontRendererObj.drawString("V4", x + 46, y + 13, CARD_ON);
+        fontRendererObj.drawString("V4", x + 46, y + 13, GuiTheme.accent());
         fontRendererObj.drawString("-", x + SIDEBAR_W - 18, y + 13, DIM);
 
         drawSidebar(x, y, mouseX, mouseY);
@@ -108,7 +110,7 @@ public class ClickGuiScreen extends GuiScreen {
 
             if (active) {
                 drawRect(x + 7, rowY, x + SIDEBAR_W - 7, rowY + 24, 0xFF292C2F);
-                drawRect(x + 7, rowY, x + 10, rowY + 24, CARD_ON);
+                drawRect(x + 7, rowY, x + 10, rowY + 24, GuiTheme.accent());
             } else if (hover) {
                 drawRect(x + 7, rowY, x + SIDEBAR_W - 7, rowY + 24, 0xFF202225);
             }
@@ -122,10 +124,6 @@ public class ClickGuiScreen extends GuiScreen {
         if (inside(mouseX, mouseY, x + 7, y + 302, x + SIDEBAR_W - 7, y + 326))
             drawRect(x + 7, y + 302, x + SIDEBAR_W - 7, y + 326, CARD_HOVER);
         fontRendererObj.drawString("Profiles", x + 16, y + 310, TEXT);
-
-        if (inside(mouseX, mouseY, x + 7, y + 327, x + SIDEBAR_W - 7, y + 351))
-            drawRect(x + 7, y + 327, x + SIDEBAR_W - 7, y + 351, CARD_HOVER);
-        fontRendererObj.drawString("Macros", x + 16, y + 335, TEXT);
     }
 
     private void drawModulePanel(int x, int y, int h, int mouseX, int mouseY) {
@@ -133,6 +131,7 @@ public class ClickGuiScreen extends GuiScreen {
 
         String categoryName = pretty(categories[selectedCategory]);
         fontRendererObj.drawString(categoryName, x + 14, y + 12, TEXT);
+        fontRendererObj.drawString(GuiTheme.getMode(), x + 160, y + 12, GuiTheme.accent());
         fontRendererObj.drawString(filteredModules().size() + " modules", x + 14, y + 27, DIM);
 
         search.drawTextBox();
@@ -161,8 +160,8 @@ public class ClickGuiScreen extends GuiScreen {
             boolean hover = inside(mouseX, mouseY, cx, cy, cx + CARD_W, cy + CARD_H);
             boolean on = module.isEnabled();
 
-            drawRect(cx, cy, cx + CARD_W, cy + CARD_H, on ? CARD_ON : (hover ? CARD_HOVER : CARD));
-            drawRect(cx, cy, cx + 3, cy + CARD_H, on ? 0xFF8BFFAA : 0xFF3A3D40);
+            drawRect(cx, cy, cx + CARD_W, cy + CARD_H, on ? GuiTheme.accent() : (hover ? CARD_HOVER : CARD));
+            drawRect(cx, cy, cx + 3, cy + CARD_H, on ? GuiTheme.accent() : 0xFF3A3D40);
 
             fontRendererObj.drawString(module.getName(), cx + 11, cy + 8, on ? 0xFF101311 : TEXT);
             String description = module.getDescription();
@@ -202,7 +201,7 @@ public class ClickGuiScreen extends GuiScreen {
             int barH = Math.max(18, (barBottom - barTop) * rowsVisible / (rowsVisible + maxScroll));
             int barY = barTop + (barBottom - barTop - barH) * scroll / maxScroll;
             drawRect(barX, barTop, barX + 2, barBottom, LINE);
-            drawRect(barX, barY, barX + 2, barY + barH, CARD_ON);
+            drawRect(barX, barY, barX + 2, barY + barH, GuiTheme.accent());
         }
     }
 
@@ -272,11 +271,6 @@ public class ClickGuiScreen extends GuiScreen {
             return;
         }
 
-        if (mouseButton == 0 && inside(mouseX, mouseY, x + 7, y + 327, x + SIDEBAR_W - 7, y + 351)) {
-            mc.displayGuiScreen(new MacroScreen(this));
-            return;
-        }
-
         int cy = y + 52;
         for (int i = 0; i < categories.length; ++i) {
             int rowY = cy + i * 28;
@@ -321,9 +315,9 @@ public class ClickGuiScreen extends GuiScreen {
                         module.toggle();
                         com.zero7wrath.clientbase.config.ConfigManager.save("default");
                     }
-                } else if (mouseButton == 1 && !module.getSettings().isEmpty()) {
-                    expanded = expanded == module ? null : module;
-                    module.open = expanded == module;
+                } else if (mouseButton == 1) {
+                    bindingModule = module;
+                    return;
                 }
                 return;
             }
@@ -340,6 +334,15 @@ public class ClickGuiScreen extends GuiScreen {
                 return;
             }
             search.textboxKeyTyped(typedChar, keyCode);
+            return;
+        }
+
+        if (bindingModule != null) {
+            if (keyCode != KeyboardConstants.KEY_ESCAPE) {
+                bindingModule.setKeyBind(keyCode);
+                com.zero7wrath.clientbase.config.ConfigManager.save("default");
+            }
+            bindingModule = null;
             return;
         }
 
