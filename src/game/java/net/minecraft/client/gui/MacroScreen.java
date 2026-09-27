@@ -7,9 +7,11 @@ import java.io.IOException;
 
 public class MacroScreen extends GuiScreen {
     private final GuiScreen parent;
-    private final GuiTextField[] commandFields = new GuiTextField[MacroManager.MAX_MACROS];
+    private GuiTextField[] moduleFields;
     private int selectedSlot = -1;
-    private String status = "Click a key box, then press a key.";
+    private int page = 0;
+    private static final int VISIBLE = 7;
+    private String status = "Bind a key, then enter a module name.";
 
     public MacroScreen(GuiScreen parent) {
         this.parent = parent;
@@ -17,48 +19,70 @@ public class MacroScreen extends GuiScreen {
 
     @Override
     public void initGui() {
-        for (int i = 0; i < MacroManager.MAX_MACROS; ++i) {
-            commandFields[i] = new GuiTextField(
-                    20 + i, fontRendererObj,
-                    width / 2 - 70, 42 + i * 28,
-                    190, 20
-            );
-            commandFields[i].setMaxStringLength(100);
-            commandFields[i].setText(MacroManager.getCommand(i));
+        buildFields();
+    }
+
+    private void buildFields() {
+        moduleFields = new GuiTextField[VISIBLE];
+        for (int i = 0; i < VISIBLE; ++i) {
+            int slot = page * VISIBLE + i;
+            moduleFields[i] = new GuiTextField(20 + i, fontRendererObj,
+                    width / 2 - 35, 70 + i * 29, 175, 20);
+            moduleFields[i].setMaxStringLength(40);
+            if (slot < MacroManager.size()) {
+                moduleFields[i].setText(MacroManager.getModule(slot));
+            }
+        }
+    }
+
+    private int slotFor(int row) {
+        return page * VISIBLE + row;
+    }
+
+    private void saveFields() {
+        for (int i = 0; i < VISIBLE; ++i) {
+            int slot = slotFor(i);
+            if (slot < MacroManager.size()) {
+                MacroManager.setModule(slot, moduleFields[i].getText());
+            }
         }
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-
         int left = width / 2 - 145;
         int right = width / 2 + 145;
 
-        drawRect(left, 18, right, Math.min(height - 12, 300), 0xF51B1A1C);
+        drawRect(left, 18, right, height - 12, 0xF51B1A1C);
         drawRect(left + 1, 19, right - 1, 48, 0xFF171618);
 
         fontRendererObj.drawString("VAPE V4", left + 12, 29, 0xFFFFFFFF);
         fontRendererObj.drawString("MACROS", left + 78, 29, 0xFF43E06D);
         fontRendererObj.drawString(status, left + 12, 54, 0xFF8C8C8C);
 
-        for (int i = 0; i < MacroManager.MAX_MACROS; ++i) {
-            int y = 70 + i * 28;
-            String key = MacroManager.getKey(i) < 0 ? "NONE" : "KEY " + MacroManager.getKey(i);
+        for (int i = 0; i < VISIBLE; ++i) {
+            int slot = slotFor(i);
+            int y = 70 + i * 29;
+            String key = slot < MacroManager.size() && MacroManager.getKey(slot) >= 0
+                    ? "KEY " + MacroManager.getKey(slot) : "NONE";
 
             drawRect(left + 12, y, left + 58, y + 22,
-                    selectedSlot == i ? 0xFF43E06D : 0xFF252629);
-            fontRendererObj.drawString(key, left + 17, y + 7,
-                    selectedSlot == i ? 0xFF101311 : 0xFFD0D0D0);
+                    selectedSlot == slot ? 0xFF43E06D : 0xFF252629);
+            fontRendererObj.drawString(key, left + 16, y + 7,
+                    selectedSlot == slot ? 0xFF101311 : 0xFFD0D0D0);
 
-            commandFields[i].drawTextBox();
-
-            drawRect(right - 52, y, right - 12, y + 22, 0xFF252629);
-            fontRendererObj.drawString("CLR", right - 43, y + 7, 0xFFD0D0D0);
+            if (slot < MacroManager.size()) {
+                moduleFields[i].drawTextBox();
+                drawRect(right - 52, y, right - 12, y + 22, 0xFF252629);
+                fontRendererObj.drawString("CLR", right - 43, y + 7, 0xFFD0D0D0);
+            }
         }
 
-        button(left + 12, height - 42, right - 12, height - 20,
-                "BACK", mouseX, mouseY);
+        button(left + 12, height - 42, left + 78, height - 20, "ADD", mouseX, mouseY);
+        button(left + 84, height - 42, left + 145, height - 20, "PREV", mouseX, mouseY);
+        button(left + 151, height - 42, left + 212, height - 20, "NEXT", mouseX, mouseY);
+        button(left + 218, height - 42, right - 12, height - 20, "BACK", mouseX, mouseY);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -80,40 +104,58 @@ public class MacroScreen extends GuiScreen {
         int left = width / 2 - 145;
         int right = width / 2 + 145;
 
-        for (int i = 0; i < MacroManager.MAX_MACROS; ++i) {
-            int y = 70 + i * 28;
+        for (int i = 0; i < VISIBLE; ++i) {
+            int slot = slotFor(i);
+            int y = 70 + i * 29;
+            if (slot >= MacroManager.size()) continue;
 
             if (inside(mouseX, mouseY, left + 12, y, left + 58, y + 22)) {
-                selectedSlot = i;
-                status = "Press a key for macro " + (i + 1) + ".";
-                commandFields[i].setFocused(false);
+                selectedSlot = slot;
+                status = "Press a key for macro " + (slot + 1) + ".";
+                moduleFields[i].setFocused(false);
                 return;
             }
 
             if (inside(mouseX, mouseY, right - 52, y, right - 12, y + 22)) {
-                MacroManager.clear(i);
-                commandFields[i].setText("");
-                if (selectedSlot == i) selectedSlot = -1;
-                status = "Cleared macro " + (i + 1) + ".";
+                MacroManager.clear(slot);
+                moduleFields[i].setText("");
+                if (selectedSlot == slot) selectedSlot = -1;
+                status = "Cleared macro " + (slot + 1) + ".";
                 return;
             }
 
-            commandFields[i].mouseClicked(mouseX, mouseY, mouseButton);
+            moduleFields[i].mouseClicked(mouseX, mouseY, mouseButton);
         }
 
-        if (inside(mouseX, mouseY, left + 12, height - 42, right - 12, height - 20)) {
-            saveCommands();
+        if (inside(mouseX, mouseY, left + 12, height - 42, left + 78, height - 20)) {
+            saveFields();
+            MacroManager.add();
+            status = "Added a new macro slot.";
+            buildFields();
+            return;
+        }
+
+        if (inside(mouseX, mouseY, left + 84, height - 42, left + 145, height - 20)) {
+            saveFields();
+            if (page > 0) --page;
+            buildFields();
+            return;
+        }
+
+        if (inside(mouseX, mouseY, left + 151, height - 42, left + 212, height - 20)) {
+            saveFields();
+            if ((page + 1) * VISIBLE < MacroManager.size()) ++page;
+            buildFields();
+            return;
+        }
+
+        if (inside(mouseX, mouseY, left + 218, height - 42, right - 12, height - 20)) {
+            saveFields();
             mc.displayGuiScreen(parent == null ? new ClickGuiScreen() : parent);
             return;
         }
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
-    }
-
-    private void saveCommands() {
-        for (int i = 0; i < MacroManager.MAX_MACROS; ++i) {
-            MacroManager.setCommand(i, commandFields[i].getText());
-        }
     }
 
     @Override
@@ -124,14 +166,13 @@ public class MacroScreen extends GuiScreen {
                 status = "Key selection cancelled.";
                 return;
             }
-
             MacroManager.setKey(selectedSlot, keyCode);
             selectedSlot = -1;
-            status = "Key set. Enter a chat command in the field.";
+            status = "Key set. Type a module name, not a chat command.";
             return;
         }
 
-        for (GuiTextField field : commandFields) {
+        for (GuiTextField field : moduleFields) {
             if (field.isFocused()) {
                 field.textboxKeyTyped(typedChar, keyCode);
                 return;
@@ -139,7 +180,7 @@ public class MacroScreen extends GuiScreen {
         }
 
         if (keyCode == KeyboardConstants.KEY_ESCAPE) {
-            saveCommands();
+            saveFields();
             mc.displayGuiScreen(parent == null ? new ClickGuiScreen() : parent);
             return;
         }
