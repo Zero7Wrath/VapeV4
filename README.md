@@ -1,6 +1,12 @@
 # VapeV4 — Eaglercraft Port
 
-**Vape V4** has been ported to **Eaglercraft** by **Zero7Wrath**.
+> ## ⚠️ DISCONTINUED
+>
+> This project has been **discontinued** and is no longer actively maintained or developed.
+>
+> The repository is kept available for archival and reference purposes. There should be no expectation of future updates, bug fixes, or support.
+
+**Vape V4** was ported to **Eaglercraft** by **Zero7Wrath**.
 
 This repository contains the Eaglercraft port of Vape V4, adapted to run within the Eaglercraft environment.
 
